@@ -27,7 +27,7 @@ run:
 
 # Run all tests quietly
 test:
-	.venv/bin/pytest -q
+	PYTHONPATH=. .venv/bin/pytest -v
 
 # Run tests with coverage
 coverage:
