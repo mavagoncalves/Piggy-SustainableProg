@@ -5,12 +5,12 @@ class Dice:
         self.value=random.randint(1, 6)
         self.icon=None
 
-    def roll(self):
+    def roll(self): #This one will roll an int value from the dice. Call this one to get value.
         self.value=random.randint(1, 6)
         self.icon=self.face
         return self.value
 
-    def face(self):
+    def face(self): #This assigns the icon according the dice's value
         icon = {
             1: "⚀",
             2: "⚁",
@@ -21,5 +21,5 @@ class Dice:
         }
         return icon[self.value]
 
-    def turn(self):
+    def turn(self): #This one joins value + icon. Call this one to show result.
         print(f"Result: {self.face()} -> {self.value}")
