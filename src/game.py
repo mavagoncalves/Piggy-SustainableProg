@@ -26,7 +26,7 @@ class Game:
                 self.current_player=self.player2
 
 
-    def change_player(self, player):
+    def change_player(self):
         if self.current_player==self.player1:
             self.current_player=self.player2
         else:
