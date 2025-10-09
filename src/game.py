@@ -47,7 +47,7 @@ class Game:
             self.current_player=self.player1
 
     def check_score(self):
-        if self.current_player.score==100:
+        if self.current_player.score>=100:
             self.winner=self.current_player
             print(f"{self.current_player} wins with {self.current_player.score} points.!")
             return True
