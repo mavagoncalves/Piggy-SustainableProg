@@ -26,7 +26,7 @@ class AI:
 
         if myscore + turn_score >= self.goal:
             return 'hold'
-        if turn_score >= limit:
+        elif turn_score >= limit:
             return 'hold'
         return 'roll' if random.random() > 0.6 else 'hold'
     
@@ -43,15 +43,48 @@ class AI:
 
         if myscore + turn_score >= self.goal:
             return 'hold'
-        
-        if lead >= limit:
+        elif lead >= limit:
             limit = 15
-        
-        if lead <= (-30):
+        elif lead <= (-30):
             limit = 25
-
-        if turn_score >= limit:
+        elif turn_score >= limit:
             return 'hold'
         return 'roll'
     
+    def hard(self, myscore, opponent_score, turn_score):
+        '''
+        Hard AI:
+        * adjust limit based on lead/lag
+        * addaptive limit based on how close to winning
+        '''
+
+        lead = myscore - opponent_score
+        limit = 20
+
+        #adjust based on game situation
+
+        if myscore + turn_score >= self.goal:
+            return 'hold'
+        elif opponent_score >= self.goal - 20:
+            limit = 25
+        elif myscore >= self.goal - 20:
+            limit = min(limit, 15)
+        elif lead >= 30:
+            limit = 15
+        elif lead <= -40:
+            limit = 30
+        
+        #endgame strategy
+
+        need = self.goal - myscore
+        if need <= 10:
+            if turn_score >= need or turn_score:
+                return 'hold'
+            return 'roll'
+        
+        #normal play
+        if turn_score >= limit:
+            return 'hold'
+        return 'roll'
+
 
