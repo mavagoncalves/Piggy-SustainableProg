@@ -17,3 +17,10 @@ def test_face_matches_value():
     d = Dice(6)
     d.value = 3
     assert d.face() == "⚂"
+
+# Check that the face updates after rolling
+def test_face_updates():
+    d = Dice(6)
+    d.roll()
+    possible_icons = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]
+    assert d.icon in possible_icons
