@@ -29,7 +29,9 @@ class Game:
                 choice=input("Roll again or hold? (r/h)")   #PREGUNTAR SI EL NUMERO ES LETRA O UN COMANDO COMO EN EL MENU
                 if choice=="h":
                     self.current_player.add_score(self.round_score)
-
+                    if self.check_score():  #CHECKS SCORE TO END GAME
+                        return
+                    break
 
 
             else: #LOOSES TURN
