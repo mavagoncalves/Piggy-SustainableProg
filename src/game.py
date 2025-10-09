@@ -9,6 +9,7 @@ class Game:
         self.player1=Player("NOMBRE1") #AQUI EL NOMBRE
         self.player2=Player("NOMBRE2") #AQUI EL OTRO NOMBRE
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
+        self.winner=None    #DEFINED FOR THE SCORE THINGY
 
     def plays_turn(self):
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
@@ -25,9 +26,11 @@ class Game:
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
-                choice=input("Roll again or hold? (r/h)")
+                choice=input("Roll again or hold? (r/h)")   #PREGUNTAR SI EL NUMERO ES LETRA O UN COMANDO COMO EN EL MENU
                 if choice=="h":
-                    pass
+                    self.current_player.add_score(self.round_score)
+
+
 
             else: #LOOSES TURN
                 print(f"{self.current_player} lost the score!")
@@ -40,3 +43,11 @@ class Game:
             self.current_player=self.player2
         else:
             self.current_player=self.player1
+
+    def check_score(self):
+        if self.current_player.score==100:
+            self.winner=self.current_player
+            print(f"{self.current_player} wins with {self.current_player.score} points.!")
+            return True
+        else:
+            return False
