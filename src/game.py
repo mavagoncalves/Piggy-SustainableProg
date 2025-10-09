@@ -11,21 +11,25 @@ class Game:
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
 
     def plays_turn(self):
-        self.round_score=0
-        print(f"\nIt is {self.current_player}'s turn.\n")
+        self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
+        print(f"\nIt is {self.current_player}'s turn.")
+        print(f"{self.current_player} has {self.current_player.score} points.\n") #POINTS REMINDER
 
         #WHERE SHOULD WE INCLUDE THE "LEAVE GAME"?
-
 
         #TURN STARTS
         while True:
             input("Press enter to continue or whatever")  #PREGUNTAR SI EL NUMERO ES INPUT O UN COMANDO COMO EN EL MENU
             roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
             print(f"{self.current_player} rolled a {self.dice.turn()}") #PRINTS THE VALUE + ICON
-            if roll!=1: #LOOSES TURN
+            if roll!=1: #CONTINUES
                 self.round_score += roll
+                print(f"Current round points: {self.round_score}")
+                choice=input("Roll again or hold? (r/h)")
+                if choice=="h":
+                    pass
 
-            else: #CONTINUES
+            else: #LOOSES TURN
                 print(f"{self.current_player} lost the score!")
                 self.change_player()  #CHANGES PLAYER FOR NEXT TURN
                 break
