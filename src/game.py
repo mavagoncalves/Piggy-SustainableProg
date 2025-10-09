@@ -12,18 +12,22 @@ class Game:
 
     def plays_turn(self):
         self.round_score=0
-        print(f"It is {self.current_player}'s turn.")
+        print(f"\nIt is {self.current_player}'s turn.\n")
+
+        #WHERE SHOULD WE INCLUDE THE "LEAVE GAME"?
+
 
         #TURN STARTS
         while True:
             input("Press enter to continue or whatever")  #PREGUNTAR SI EL NUMERO ES INPUT O UN COMANDO COMO EN EL MENU
-            roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE
+            roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
             print(f"{self.current_player} rolled a {self.dice.turn()}") #PRINTS THE VALUE + ICON
-            if self.dice.roll()!=1:
+            if roll!=1: #LOOSES TURN
                 self.round_score += self.dice.roll()
-            else:
+            else: #CONTINUES
                 print(f"{self.player1} lost the score!")
-                self.current_player=self.player2
+                self.change_player()  #CHANGES PLAYER FOR NEXT TURN
+                break
 
 
     def change_player(self):
