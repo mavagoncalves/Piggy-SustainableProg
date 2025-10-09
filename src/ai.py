@@ -14,5 +14,20 @@ class AI:
             return self.hard(myscore, opponent_score, turn_score)
         else:
             raise ValueError("Unknown difficulty level => please choose 'easy', 'medium', or 'hard'.")
+        
+    def easy(self, myscore, opponent_score, turn_score):
+        '''
+        Easy AI: 
+        * rolls until turn score is 20 or more, then holds.
+        * holds if it already won.
+        * some chance to hold earlier.
+        '''
+        limit = 20
+
+        if myscore + turn_score >= self.goal:
+            return 'hold'
+        if turn_score >= limit:
+            return 'hold'
+        return 'roll' if random.random() > 0.6 else 'hold'
     
 
