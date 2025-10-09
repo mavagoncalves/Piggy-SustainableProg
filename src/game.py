@@ -32,8 +32,8 @@ class Game:
                     if self.check_score():  #CHECKS SCORE TO END GAME
                         return
                     break
-
-
+                elif choice!="r":
+                    print("Invalid choice, please select 'r' or 'h'")
             else: #LOOSES TURN
                 print(f"{self.current_player} lost the score!")
                 self.change_player()  #CHANGES PLAYER FOR NEXT TURN
