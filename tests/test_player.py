@@ -1,4 +1,6 @@
 from src.player import Player
+
+
 def test_initial_values():
     """Player should start with the correct name and 0 score."""
     player = Player("Alice")
