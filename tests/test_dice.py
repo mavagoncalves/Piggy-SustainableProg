@@ -12,3 +12,8 @@ def test_roll_is_int():
     value = d.roll()
     assert type(value) == int
 
+# Check that face() shows the right symbol
+def test_face_matches_value():
+    d = Dice(6)
+    d.value = 3
+    assert d.face() == "⚂"
