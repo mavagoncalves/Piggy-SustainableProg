@@ -23,9 +23,10 @@ class Game:
             roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
             print(f"{self.current_player} rolled a {self.dice.turn()}") #PRINTS THE VALUE + ICON
             if roll!=1: #LOOSES TURN
-                self.round_score += self.dice.roll()
+                self.round_score += roll
+
             else: #CONTINUES
-                print(f"{self.player1} lost the score!")
+                print(f"{self.current_player} lost the score!")
                 self.change_player()  #CHANGES PLAYER FOR NEXT TURN
                 break
 
