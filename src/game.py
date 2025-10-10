@@ -26,14 +26,14 @@ class Game:
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
-                choice=input("Roll again or hold? (roll/hold)")   #PREGUNTAR SI EL NUMERO ES LETRA O UN COMANDO COMO EN EL MENU
-                if choice=="hold":
+                choice=input("Roll again or hold? (r/h)")
+                if choice in ["hold","h"]:
                     self.current_player.add_score(self.round_score)
                     if self.check_score():  #CHECKS SCORE TO END GAME
                         return
                     break
-                elif choice!="roll":
-                    print("Invalid choice, please write 'roll' or 'hold'")
+                elif choice not in ["roll", "r"]:
+                    print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
             else: #LOOSES TURN
                 print(f"{self.current_player} lost the score!")
                 self.change_player()  #CHANGES PLAYER FOR NEXT TURN
