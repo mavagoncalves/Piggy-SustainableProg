@@ -32,3 +32,11 @@ def test_easy_returns_roll_when_not_finished():
         assert ai.easy(myscore, opponentscore, turn_score)=='roll'
     finally:
         random.random=original_random
+
+def test_medium_holds_when_goal():
+    ai=AI('medium', goal=100)
+    assert ai.medium(95,0,5)=='hold'
+
+def test_medium_holds_when_goal_surpassed():
+    ai=AI('medium', goal=100)
+    assert ai.medium(97,0,6)=='hold'
