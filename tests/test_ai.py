@@ -1,8 +1,8 @@
 from src.ai import AI
 import pytest
+import random
 
-from src.dice import Dice
-
+#   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
 
 def test_easy_returns_hold_when_goal():
     ai=AI('easy', goal=100)
@@ -17,5 +17,18 @@ def test_easy_holds_when_limit():
     assert ai.easy(10,0,20) =='hold'
 
 def test_easy_returns_roll_when_not_finished():
-    ai=AI('easy')
-    assert ai.easy(10,0,5)=='roll'
+    ai=AI('easy', goal=100)
+    turn_score=10
+    myscore=0
+    opponentscore=0
+    original_random=random.random   #original secured
+    try:
+        # copy with forced result
+        random.random=lambda:0.5
+        #And then checks limits
+        assert turn_score<20
+        assert myscore+turn_score<ai.goal
+
+        assert ai.easy(myscore, opponentscore, turn_score)=='roll'
+    finally:
+        random.random=original_random
