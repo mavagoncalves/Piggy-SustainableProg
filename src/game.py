@@ -20,13 +20,19 @@ class Game:
 
         #TURN STARTS
         while True:
-            input("Press enter to continue or whatever")  #PREGUNTAR SI EL NUMERO ES INPUT O UN COMANDO COMO EN EL MENU
+            choice=input("Press ENTER to roll or 'q' to quit").strip().lower()
+            # OPTION TO END GAME HERE
+            if choice=="q":
+                print("Game ended without winner!")
+                exit()
+
+            # GAME CONTINUES
             roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
             print(f"{self.current_player} rolled a {self.dice.turn()}") #PRINTS THE VALUE + ICON
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
-                choice=input("Roll again or hold? (r/h)")
+                choice=input("Roll again or hold? (r/h)").strip().lower()
                 if choice in ["hold","h"]:
                     self.current_player.add_score(self.round_score)
                     if self.check_score():  #CHECKS SCORE TO END GAME
