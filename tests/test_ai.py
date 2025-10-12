@@ -3,7 +3,7 @@ import pytest
 import random
 
 #   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
-
+#EASY
 def test_easy_returns_hold_when_goal():
     ai=AI('easy', goal=100)
     assert ai.easy(95,0,5)=='hold'
@@ -32,7 +32,7 @@ def test_easy_returns_roll_when_not_finished():
         assert ai.easy(myscore, opponentscore, turn_score)=='roll'
     finally:
         random.random=original_random
-
+#MEDIUM
 def test_medium_holds_when_goal():
     ai=AI('medium', goal=100)
     assert ai.medium(95,0,5)=='hold'
@@ -40,3 +40,9 @@ def test_medium_holds_when_goal():
 def test_medium_holds_when_goal_surpassed():
     ai=AI('medium', goal=100)
     assert ai.medium(97,0,6)=='hold'
+
+def test_medium_holds_when_limit():
+    ai=AI('medium', goal = 100)
+    assert ai.medium(10,0,20)=='hold'
+
+#HARD
