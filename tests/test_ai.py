@@ -45,4 +45,14 @@ def test_medium_holds_when_limit():
     ai=AI('medium', goal = 100)
     assert ai.medium(10,0,20)=='hold'
 
+def test_medium_returns_roll_when_not_finished():
+    ai=AI('medium', goal = 100)
+    myscore = 10
+    opponentscore = 0
+    turn_score = 10
+    assert myscore + turn_score < ai.goal
+    assert turn_score < 20
+    assert ai.medium(myscore, opponentscore, turn_score) == 'roll'
+
+
 #HARD
