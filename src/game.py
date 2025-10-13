@@ -19,7 +19,7 @@ class Game:
 
         #TURN STARTS
         while True:
-            choice=input("Press ENTER to roll or 'q' to quit").strip().lower()
+            choice=input("Press 'r' to roll or 'q' to quit").strip().lower()
             if choice=="q":
                 print("Game ended without winner!")
                 exit()
@@ -73,13 +73,13 @@ class Game:
                 self.current_player.add_score(score_cheat)
                 self.current_player.cheat_used=True
             elif choice_cheats=="2":    # OPTION 2
-                hypothetical_score = self.current_player.score-score_cheat
                 score_cheat=int(input("Enter score to subtract: "))
+                hypothetical_score = self.current_player.score - score_cheat
                 if score_cheat not in [1, 100]:
                     print("Invalid choice, enter value between 1-100")
                 if hypothetical_score<0:
                     print("Invalid choice, your score can't be less than 0")
                 self.current_player.score-=score_cheat
                 self.current_player.cheat_used=True
-            elif choice_cheats=="3":
+            elif choice_cheats=="3":    # QUIT
                 break
