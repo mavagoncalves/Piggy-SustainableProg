@@ -16,8 +16,6 @@ class Game:
         print(f"\nIt is {self.current_player}'s turn.")
         print(f"{self.current_player} has {self.current_player.score} points.\n") #POINTS REMINDER
 
-        #WHERE SHOULD WE INCLUDE THE "LEAVE GAME"?
-
         #TURN STARTS
         while True:
             choice=input("Press ENTER to roll or 'q' to quit").strip().lower()
@@ -59,3 +57,25 @@ class Game:
             return True
         else:
             return False
+
+
+
+
+    # FUNCION PARA LOS TRUCOS
+
+    def cheat_menu(self):
+        print(f"""WELCOME TO CHEAT MENU
+-   press 1 to add 5 points
+-   press 2 to add 30 points
+-   press 3 to add 50 points
+-   press 4 to quit the cheat  menu
+Current points: {self.current_player.score}""")
+        choice_cheats=input("Choose option: ")
+        if choice_cheats=="1":
+            self.current_player.score += 5
+        elif choice_cheats=="2":
+            self.current_player.score+=30
+        elif choice_cheats=="3":
+            self.current_player.score+=50
+        elif choice_cheats=="4":
+            exit()
