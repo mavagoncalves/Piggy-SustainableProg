@@ -10,6 +10,7 @@ class Game:
         self.player2=Player("NOMBRE2") #AQUI EL OTRO NOMBRE
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
         self.winner=None    #DEFINED FOR THE SCORE THINGY
+        self.cheat_used=False   #SNITCHER FLAG, TO SHOW ON SCOREBOARD
 
     def plays_turn(self):
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
@@ -19,7 +20,6 @@ class Game:
         #TURN STARTS
         while True:
             choice=input("Press ENTER to roll or 'q' to quit").strip().lower()
-            # OPTION TO END GAME HERE
             if choice=="q":
                 print("Game ended without winner!")
                 exit()
@@ -58,46 +58,28 @@ class Game:
         else:
             return False
 
-
-
-
-    # FUNCION PARA LOS TRUCOS
-
     def cheat_menu(self):
-        print(f"""WELCOME TO CHEAT MENU
--   press 1 to add 5 points
--   press 2 to add 20 points
--   press 3 to add 50 points
--   press 4 to quit the cheat  menu
-Current points: {self.current_player.score}""")
-        choice_cheats=input("Choose option: ")
-        if choice_cheats=="1":  # OPTION 1
-            hypothetical_result=self.current_player.score+5
-            if  hypothetical_result>=100:
-                print("If you do this action you will reach the score goal and finish the game in the next round.")
-                choice_menu=input("Are you sure? (y/n)").lower()
-                if choice_menu=="y":
-                    self.current_player.score += 5
-                    cheats_used=True
-            else:
-                self.current_player.score += 5
-        elif choice_cheats=="2":    # OPTION 2
-            hypothetical_result=self.current_player.score+20
-            if  hypothetical_result>=100:
-                print("If you do this action you will reach the score goal and finish the game in the next round.")
-                choice_menu=input("Are you sure? (y/n)").lower()
-                if choice_menu=="y":
-                    self.current_player.score += 20
-                    cheats_used = True
-            else:
-                self.current_player.score += 20
-        elif choice_cheats=="3":  # OPTION 3
-            hypothetical_result = self.current_player.score + 50
-            if hypothetical_result >= 100:
-                print("If you do this action you will reach the score goal and finish the game in the next round.")
-                choice_menu = input("Are you sure? (y/n)").lower()
-                if choice_menu == "y":
-                    self.current_player.score += 50
-                    cheats_used = True
-            else:
-                self.current_player.score += 50
+        while True:
+            print(f"""WELCOME TO CHEAT MENU
+    -   press 1 to add points
+    -   press 2 to subtract points
+    -   press 3 to quit the cheat  menu
+    Current points: {self.current_player.score}""")
+            choice_cheats=input("Choose option: ")
+            if choice_cheats=="1":  # OPTION 1
+                score_cheat=int(input("Enter score to add: "))
+                if score_cheat not in [1,100]:
+                    print("Invalid choice, enter value between 1-100")
+                self.current_player.add_score(score_cheat)
+                self.current_player.cheat_used=True
+            elif choice_cheats=="2":    # OPTION 2
+                hypothetical_score = self.current_player.score-score_cheat
+                score_cheat=int(input("Enter score to subtract: "))
+                if score_cheat not in [1, 100]:
+                    print("Invalid choice, enter value between 1-100")
+                if hypothetical_score<0:
+                    print("Invalid choice, your score can't be less than 0")
+                self.current_player.score-=score_cheat
+                self.current_player.cheat_used=True
+            elif choice_cheats=="3":
+                break
