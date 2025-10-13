@@ -6,8 +6,8 @@ class Game:
     def __init__(self):
         self.round_score = 0
         self.dice=Dice(6)
-        self.player1=Player("NOMBRE1") #AQUI EL NOMBRE
-        self.player2=Player("NOMBRE2") #AQUI EL OTRO NOMBRE
+        self.player1=Player.name #AQUI EL NOMBRE
+        self.player2=Player.name #AQUI EL OTRO NOMBRE
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
         self.winner=None    #DEFINED FOR THE SCORE THINGY
         self.cheat_used=False   #SNITCHER FLAG, TO SHOW ON SCOREBOARD
@@ -64,13 +64,13 @@ class Game:
 
     def cheat_menu(self):
         while True:
-            print(f"""WELCOME TO CHEAT MENU
-    -   press 1 to add points
-    -   press 2 to subtract points
-    -   press 3 to quit the cheat  menu
-    Current points: {self.current_player.score}""")
-            choice_cheats=input("Choose option: ")
-            if choice_cheats=="1":  # OPTION 1
+            if self.current_player.score>=100:
+                print('Maximum score reached! Cheat menu will close now\n')
+                break
+            self.show_cheat_menu()
+            choice_cheats = input("Choose option: ")
+
+            if choice_cheats=="1":  # OPTION 1 - ADDING POINTS
                 try:
                     score_cheat=int(input("Enter score to add: "))
                 except ValueError:
@@ -82,14 +82,30 @@ class Game:
                 self.current_player.add_score(score_cheat)
                 self.current_player.cheat_used=True
                 break
-            elif choice_cheats=="2":    # OPTION 2
-                score_cheat=int(input("Enter score to subtract: "))
+            elif choice_cheats=="2":    # OPTION 2 - SUBTRACTING POINTS
+                try:
+                    score_cheat=int(input("Enter score to subtract: "))
+                except ValueError:
+                    print("Invalid choice, enter a number.")
+                    continue
                 hypothetical_score = self.current_player.score - score_cheat
                 if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
+                    continue
                 if hypothetical_score<0:
                     print("Invalid choice, your score can't be less than 0")
+                    continue
                 self.current_player.score-=score_cheat
                 self.current_player.cheat_used=True
-            elif choice_cheats=="3":    # QUIT
+            elif choice_cheats=="3":    # QUIT - JUST QUITTING lol
                 break
+            else:
+                print("Invalid option: please select '1', '2' or '3'.")
+
+
+    def show_cheat_menu(self):
+        print(f"""WELCOME TO CHEAT MENU
+            -   press 1 to add points
+            -   press 2 to subtract points
+            -   press 3 to quit the cheat  menu
+            Current points: {self.current_player.score}""")
