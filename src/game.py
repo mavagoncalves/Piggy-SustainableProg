@@ -24,9 +24,13 @@ class Game:
                 print("Game ended without winner!")
                 exit()
 
-            # GAME CONTINUES
-            roll=self.dice.roll() #ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
-            print(f"{self.current_player} rolled a {self.dice.turn()}") #PRINTS THE VALUE + ICON
+            #   CHEAT MENU ACCESS (OPTION HIDDEN)
+            elif choice=="cheats":
+                self.cheat_menu()
+
+            #   GAME CONTINUES
+            roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
+            print(f"{self.current_player} rolled a {self.dice.turn()}") #   PRINTS THE VALUE + ICON
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
@@ -40,7 +44,7 @@ class Game:
                     print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
             else: #LOOSES TURN
                 print(f"{self.current_player} lost the score!")
-                self.change_player()  #CHANGES PLAYER FOR NEXT TURN
+                self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
 
 
@@ -68,7 +72,7 @@ class Game:
             choice_cheats=input("Choose option: ")
             if choice_cheats=="1":  # OPTION 1
                 score_cheat=int(input("Enter score to add: "))
-                if score_cheat not in [1,100]:
+                if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
                 self.current_player.add_score(score_cheat)
                 self.current_player.cheat_used=True
