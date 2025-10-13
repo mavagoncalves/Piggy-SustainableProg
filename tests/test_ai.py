@@ -67,3 +67,7 @@ def test_hard_holds_when_goal_surpassed():
 def test_hard_holds_when_limit():
     ai=AI('hard', goal=100)
     assert ai.hard(10,0,20)=='hold'
+
+def test_hard_returns_roll_when_not_finished():
+    ai=AI('hard', goal=100)
+    assert ai.hard(10,0,5)=='roll'
