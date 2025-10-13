@@ -43,7 +43,7 @@ class Game:
                 elif choice not in ["roll", "r"]:
                     print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
             else: #LOOSES TURN
-                print(f"{self.current_player} lost the score!")
+                print(f"{self.current_player} lost the score adn the turn!")
                 self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
 
@@ -71,15 +71,21 @@ class Game:
     Current points: {self.current_player.score}""")
             choice_cheats=input("Choose option: ")
             if choice_cheats=="1":  # OPTION 1
-                score_cheat=int(input("Enter score to add: "))
+                try:
+                    score_cheat=int(input("Enter score to add: "))
+                except ValueError:
+                    print("Invalid choice, enter a number.")
+                    continue
                 if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
+                    continue
                 self.current_player.add_score(score_cheat)
                 self.current_player.cheat_used=True
+                break
             elif choice_cheats=="2":    # OPTION 2
                 score_cheat=int(input("Enter score to subtract: "))
                 hypothetical_score = self.current_player.score - score_cheat
-                if score_cheat not in [1, 100]:
+                if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
                 if hypothetical_score<0:
                     print("Invalid choice, your score can't be less than 0")
