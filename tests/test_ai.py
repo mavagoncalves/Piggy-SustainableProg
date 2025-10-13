@@ -63,3 +63,7 @@ def test_hard_holds_when_goal():
 def test_hard_holds_when_goal_surpassed():
     ai=AI('hard', goal=100)
     assert ai.hard(97,0,6)=='hold'
+
+def test_hard_holds_when_limit():
+    ai=AI('hard', goal=100)
+    assert ai.hard(10,0,20)=='hold'
