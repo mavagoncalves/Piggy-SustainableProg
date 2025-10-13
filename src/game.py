@@ -74,37 +74,30 @@ Current points: {self.current_player.score}""")
         if choice_cheats=="1":  # OPTION 1
             hypothetical_result=self.current_player.score+5
             if  hypothetical_result>=100:
-                print("If you do this action you will reach the score goal and finish the game")
+                print("If you do this action you will reach the score goal and finish the game in the next round.")
                 choice_menu=input("Are you sure? (y/n)").lower()
                 if choice_menu=="y":
                     self.current_player.score += 5
-                    self.winner = self.current_player
-                    print(f"{self.current_player} wins with {self.current_player.score} points.!")
-                    return True #CAMBIAR ESTOS RETURN POR ALGO AL SALIR DEL JUEGO
-                    # QUIZAS PONER EL GANADOR SOLO CUANDO SE CIERRE EL MENU Y ANADIR FLAG
+                    cheats_used=True
             else:
                 self.current_player.score += 5
         elif choice_cheats=="2":    # OPTION 2
             hypothetical_result=self.current_player.score+20
             if  hypothetical_result>=100:
-                print("If you do this action you will reach the score goal and finish the game")
+                print("If you do this action you will reach the score goal and finish the game in the next round.")
                 choice_menu=input("Are you sure? (y/n)").lower()
                 if choice_menu=="y":
                     self.current_player.score += 20
-                    self.winner = self.current_player
-                    print(f"{self.current_player} wins with {self.current_player.score} points.!")
-                    return True
+                    cheats_used = True
             else:
                 self.current_player.score += 20
         elif choice_cheats=="3":  # OPTION 3
             hypothetical_result = self.current_player.score + 50
             if hypothetical_result >= 100:
-                print("If you do this action you will reach the score goal and finish the game")
+                print("If you do this action you will reach the score goal and finish the game in the next round.")
                 choice_menu = input("Are you sure? (y/n)").lower()
                 if choice_menu == "y":
                     self.current_player.score += 50
-                    self.winner = self.current_player
-                    print(f"{self.current_player} wins with {self.current_player.score} points.!")
-                    return True
+                    cheats_used = True
             else:
                 self.current_player.score += 50
