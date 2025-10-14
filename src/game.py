@@ -41,7 +41,7 @@ class Game:
                 elif choice not in ["roll", "r"]:
                     print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
             else: #LOOSES TURN
-                print(f"{self.current_player.name} lost the score adn the turn!")
+                print(f"{self.current_player.name} lost the score and the turn!")
                 self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
 
