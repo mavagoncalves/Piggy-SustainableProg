@@ -6,8 +6,8 @@ class Game:
     def __init__(self):
         self.round_score = 0
         self.dice=Dice(6)
-        self.player1=Player.name #AQUI EL NOMBRE
-        self.player2=Player.name #AQUI EL OTRO NOMBRE
+        self.player1=Player(input('Enter name for player 1: ')) #AQUI EL NOMBRE
+        self.player2=Player(input('Enter name for player 2: ')) #AQUI EL OTRO NOMBRE
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
         self.winner=None    #DEFINED FOR THE SCORE THINGY
         self.cheat_used=False   #SNITCHER FLAG, TO SHOW ON SCOREBOARD
@@ -15,15 +15,14 @@ class Game:
     def plays_turn(self):
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
         print(f"\nIt is {self.current_player}'s turn.")
-        print(f"{self.current_player} has {self.current_player.score} points.\n") #POINTS REMINDER
+        print(f"{self.current_player.name} has {self.current_player.score} points.\n") #POINTS REMINDER
 
         #TURN STARTS
         while True:
             choice=input("Press 'r' to roll or 'q' to quit").strip().lower()
             if choice=="q":
                 print("Game ended without winner!")
-                exit()
-
+                return
             #   CHEAT MENU ACCESS (OPTION HIDDEN)
             elif choice=="cheats":
                 self.cheat_menu()
