@@ -13,7 +13,7 @@ class Game:
 
     def plays_turn(self):
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
-        print(f"\nIt is {self.current_player}'s turn.")
+        print(f"\nIt is {self.current_player.name}'s turn.")
         print(f"{self.current_player.name} has {self.current_player.score} points.\n") #POINTS REMINDER
 
         #TURN STARTS
@@ -28,7 +28,7 @@ class Game:
 
             #   GAME CONTINUES
             roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
-            print(f"{self.current_player} rolled a {self.dice.turn()}") #   PRINTS THE VALUE + ICON
+            print(f"{self.current_player.name} rolled a {self.dice.turn()}") #   PRINTS THE VALUE + ICON
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
@@ -41,7 +41,7 @@ class Game:
                 elif choice not in ["roll", "r"]:
                     print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
             else: #LOOSES TURN
-                print(f"{self.current_player} lost the score adn the turn!")
+                print(f"{self.current_player.name} lost the score adn the turn!")
                 self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
 
@@ -78,7 +78,7 @@ class Game:
                     print("Invalid choice, enter value between 1-100")
                     continue
                 self.current_player.add_score(score_cheat)
-                self.current_player.cheat_used=True
+                setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR CHEATS USED
             elif choice_cheats=="2":    # OPTION 2 - SUBTRACTING POINTS
                 try:
                     score_cheat=int(input("Enter score to subtract: "))
@@ -93,7 +93,7 @@ class Game:
                     print("Invalid choice, your score can't be less than 0")
                     continue
                 self.current_player.score-=score_cheat
-                self.current_player.cheat_used=True
+                setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR CHEATS USED
             elif choice_cheats=="3":    # QUIT - JUST QUITTING lol
                 break
             else:
@@ -102,7 +102,7 @@ class Game:
 
     def show_cheat_menu(self):
         print(f"""WELCOME TO CHEAT MENU
-            -   press 1 to add points
-            -   press 2 to subtract points
-            -   press 3 to quit the cheat  menu
+            - press 1 to add points
+            - press 2 to subtract points
+            - press 3 to quit the cheat  menu
             Current points: {self.current_player.score}""")
