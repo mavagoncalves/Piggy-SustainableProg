@@ -28,7 +28,7 @@ class Game:
 
             #   GAME CONTINUES
             roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
-            print(f"{self.current_player.name} rolled a {self.dice.turn()}") #   PRINTS THE VALUE + ICON
+            print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}") #   PRINTS THE VALUE + ICON
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
