@@ -10,7 +10,6 @@ class Game:
         self.player2=Player(input('Enter name for player 2: ')) #AQUI EL OTRO NOMBRE
         self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
         self.winner=None    #DEFINED FOR THE SCORE THINGY
-        self.cheat_used=False   #SNITCHER FLAG, TO SHOW ON SCOREBOARD
 
     def plays_turn(self):
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
@@ -56,7 +55,7 @@ class Game:
     def check_score(self):
         if self.current_player.score>=100:
             self.winner=self.current_player
-            print(f"{self.current_player} wins with {self.current_player.score} points.!")
+            print(f"{self.current_player.name} wins with {self.current_player.score} points.!")
             return True
         else:
             return False
@@ -80,7 +79,6 @@ class Game:
                     continue
                 self.current_player.add_score(score_cheat)
                 self.current_player.cheat_used=True
-                break
             elif choice_cheats=="2":    # OPTION 2 - SUBTRACTING POINTS
                 try:
                     score_cheat=int(input("Enter score to subtract: "))
