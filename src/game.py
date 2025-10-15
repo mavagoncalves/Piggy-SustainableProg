@@ -7,7 +7,6 @@ class Game:
     def __init__(self):
         self.player1 = Player(input('Enter name for Player 1: '))
         self.dice=Dice(6)
-        self.winner=None
         self.current_player=None #ASIGNAR A JUGADOR UNO DENTR ODE LAS OPCIONES SIGUIENTES, POR SI SE ESCOGE EXIT
         self.winner=None
         self.vs_ai=False
@@ -108,12 +107,13 @@ class Game:
                 print(f"{self.current_player.name} lost the score and the turn!")
                 return
             self.round_score += roll
-            print(f"AI round points: {self.round_score} (decision:{decision}")
+            print(f"AI round points: {self.round_score} (decision:{decision})")
 
             if decision=="hold":
                 self.current_player.add_score(self.round_score)
-                if self.check_score(): return
-            break
+                if self.check_score():
+                    return
+                break
 
 
     def change_player(self):
