@@ -4,15 +4,6 @@ from ai import AI
 
 
 class Game:
-    # def __init__(self):
-    #     #IF/ELSE PARA EL MODO DE JUEGO
-    #     self.round_score = 0
-    #     self.dice=Dice(6)
-    #     self.player1=Player(input('Enter name for Player 1: ')) #AQUI EL NOMBRE (PROVISIONAL)
-    #     self.player2=Player(input('Enter name for Player 2: ')) #AQUI EL OTRO NOMBRE (PROVISIONAL)
-    #     self.current_player=self.player1 #FIRST TURN ASSIGNED ALWAYS TO PLAYER 1, THEN CHANGES
-    #     self.winner=None    #DEFINED FOR THE SCORE THINGY
-
     def __init__(self):
         self.player1 = Player(input('Enter name for Player 1: '))
         self.dice=Dice(6)
@@ -22,21 +13,32 @@ class Game:
         self.vs_ai=False
         self.ai_controller=None
         self.round_score=0
+        self.game_on=True   #GAME RUNNING
+
         mode=input("Choose mode: 1) Two players 2) Play vs AI 3) Exit: ").strip()
         if mode=="1":
             self.player2 = Player(input('Enter name for Player 2: '))
             self.current_player = self.player1
+
         elif mode=="2":
             difficulty=input("Select AI difficulty (easy/medium/hard): ").strip().lower()
             if difficulty not in ["easy","medium","hard"]:
-                print("Invalid difficulty")
-            else:
-                self.player2 = Player("AI")
-                self.ai_controller = AI(difficulty)
-                self.vs_ai=True
-                self.current_player = self.player1
+                print("Invalid difficulty, exiting...")
+                self.game_on=False  #EXITING HERE
+                return
+            self.player2 = Player("AI")
+            self.ai_controller = AI(difficulty)
+            self.vs_ai=True
+            self.current_player = self.player1
+
         elif mode=="3":
             print("Exiting...")
+            self.game_on=False  #EXITING HERE
+            return
+
+        else:
+            print("Invalid option, exiting...")
+            self.game_on=False   #EXITING HERE
             return
 
 
