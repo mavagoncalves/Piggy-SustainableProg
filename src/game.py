@@ -21,6 +21,7 @@ class Game:
 
         elif mode=="2":
             difficulty=input("Select AI difficulty (easy/medium/hard): ").strip().lower()
+
             if difficulty not in ["easy","medium","hard"]:
                 print("Invalid difficulty, exiting...")
                 self.game_on=False  #EXITING HERE
@@ -40,13 +41,17 @@ class Game:
             self.game_on=False   #EXITING HERE
             return
 
+
     def run(self):  #Main function to run the whole thing
+
         if not self.game_on:
             return
         while self.game_on and not self.winner: #Checking the game is on and there is NO winner
             self.plays_turn()   #Plays whole turn
+
             if not self.winner:
                 self.change_player()
+
 
     def plays_turn(self):
         if not self.game_on:    #checking the game is running
@@ -64,6 +69,7 @@ class Game:
         #TURN STARTS
         while True:
             choice=input("Press 'r' to roll or 'q' to quit").strip().lower()
+
             if choice=="q":
                 print("Game ended without winner!")
                 self.game_on=False  #Closes the game before quitting
@@ -76,6 +82,7 @@ class Game:
             #   GAME CONTINUES
             roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
             print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}") #   PRINTS THE VALUE + ICON
+
             if roll!=1: #CONTINUES
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
@@ -93,6 +100,7 @@ class Game:
                 print(f"{self.current_player.name} lost the score and the turn!")
                 self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
+
 
     def ai_turn(self):  #AI'S TURN
         print(f"{self.current_player.name} is playing")
@@ -118,12 +126,15 @@ class Game:
 
 
     def change_player(self):
+
         if self.current_player==self.player1:
             self.current_player=self.player2
         else:
             self.current_player=self.player1
 
+
     def check_score(self):
+
         if self.current_player.score>=100:
             self.winner=self.current_player
             print(f"{self.current_player.name} wins with {self.current_player.score} points.!")
@@ -131,6 +142,7 @@ class Game:
         return False
 
     def cheat_menu(self):
+
         while True:
             if self.current_player.score>=100:  #Checks of the player tries to get in again after being kicked out
                 print('Maximum score reached! Cheat menu will close now\n')
@@ -144,11 +156,13 @@ class Game:
                 except ValueError:
                     print("Invalid choice, enter a number.")
                     continue
+
                 if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
                     continue
                 self.current_player.add_score(score_cheat)
                 setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR PLAYER FOR CHEATS USED
+
             elif choice_cheats=="2":    # OPTION 2 - SUBTRACTING POINTS
                 try:
                     score_cheat=int(input("Enter score to subtract: "))
@@ -156,6 +170,7 @@ class Game:
                     print("Invalid choice, enter a number.")
                     continue
                 hypothetical_score = self.current_player.score - score_cheat
+
                 if not (1<=score_cheat<=100):
                     print("Invalid choice, enter value between 1-100")
                     continue
@@ -164,6 +179,7 @@ class Game:
                     continue
                 self.current_player.score-=score_cheat
                 setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR CHEATS USED
+
             elif choice_cheats=="3":    # QUIT - JUST QUITTING lol
                 break
             else:
