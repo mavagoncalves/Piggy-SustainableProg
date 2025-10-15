@@ -66,6 +66,7 @@ class Game:
             choice=input("Press 'r' to roll or 'q' to quit").strip().lower()
             if choice=="q":
                 print("Game ended without winner!")
+                self.game_on=False  #Closes the game before quitting
                 return
             #   CHEAT MENU ACCESS (OPTION HIDDEN)
             elif choice=="cheats":
