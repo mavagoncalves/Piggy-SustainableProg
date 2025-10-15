@@ -41,11 +41,26 @@ class Game:
             self.game_on=False   #EXITING HERE
             return
 
+    def run(self):  #Main function to run the whole thing
+        if not self.game_on:
+            return
+        while self.game_on and not self.winner: #Checking the game is on and there is NO winner
+            self.plays_turn()   #Plays whole turn
+            if not self.winner:
+                self.change_player()
 
     def plays_turn(self):
+        if not self.game_on:    #checking the game is running
+            return
+
         self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
         print(f"\nIt is {self.current_player.name}'s turn.")
         print(f"{self.current_player.name} has {self.current_player.score} points.\n") #POINTS REMINDER
+
+        if self.vs_ai and self.current_player ==self.player2:   #Checking it is the ai turn, it runs the function
+            self.ai_turn()
+            return
+
 
         #TURN STARTS
         while True:
@@ -56,6 +71,7 @@ class Game:
             #   CHEAT MENU ACCESS (OPTION HIDDEN)
             elif choice=="cheats":
                 self.cheat_menu()
+                continue
 
             #   GAME CONTINUES
             roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
@@ -64,6 +80,7 @@ class Game:
                 self.round_score += roll
                 print(f"Current round points: {self.round_score}")
                 choice=input("Roll again or hold? (r/h)").strip().lower()
+
                 if choice in ["hold","h"]:
                     self.current_player.add_score(self.round_score)
                     if self.check_score():  #CHECKS SCORE TO END GAME
@@ -71,10 +88,32 @@ class Game:
                     break
                 elif choice not in ["roll", "r"]:
                     print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
+
             else: #LOOSES TURN
                 print(f"{self.current_player.name} lost the score and the turn!")
                 self.change_player()  # CHANGES PLAYER FOR NEXT TURN
                 break
+
+    def ai_turn(self):  #AI'S TURN
+        print(f"{self.current_player.name} is playing")
+        self.round_score=0
+
+        while True:
+            opponent=self.player1 if self.current_player==self.player2 else self.player2
+            decision=self.ai_controller.decide_difficulty(self.current_player.score, opponent.score,self.round_score)
+            roll=self.dice.roll()
+            print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}")
+
+            if roll==1: #LOOSES TURN
+                print(f"{self.current_player.name} lost the score and the turn!")
+                return
+            self.round_score += roll
+            print(f"AI round points: {self.round_score} (decision:{decision}")
+
+            if decision=="hold":
+                self.current_player.add_score(self.round_score)
+                if self.check_score(): return
+            break
 
 
     def change_player(self):
@@ -88,12 +127,11 @@ class Game:
             self.winner=self.current_player
             print(f"{self.current_player.name} wins with {self.current_player.score} points.!")
             return True
-        else:
-            return False
+        return False
 
     def cheat_menu(self):
         while True:
-            if self.current_player.score>=100:
+            if self.current_player.score>=100:  #Checks of the player tries to get in again after being kicked out
                 print('Maximum score reached! Cheat menu will close now\n')
                 break
             self.show_cheat_menu()
