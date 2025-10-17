@@ -14,7 +14,7 @@ class Game:
         self.round_score=0
         self.game_on=True   #GAME RUNNING
 
-        mode=input("Choose mode: 1) Two players 2) Play vs AI 3) Exit: ").strip()
+        mode=input("Choose mode:\n1) Two players \n2) Play vs AI\n3) Exit: ").strip()
         if mode=="1":
             self.player2 = Player(input('Enter name for Player 2: '))
             self.current_player = self.player1
