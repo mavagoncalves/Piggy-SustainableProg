@@ -3,12 +3,11 @@ from src import game
 from src.player import Player
 
 
-class TestGame(game.Game):
-    def __init__(self):
-        pass
+def make_game():
+    return game.Game.__new__(game.Game)
 
 def test_change_player_switches_between_players():
-    g = TestGame()
+    g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
     g.current_player = g.player1
@@ -18,7 +17,7 @@ def test_change_player_switches_between_players():
     assert g.current_player is g.player1
 
 def test_check_score_sets_winner_at_or_above_100():
-    g = TestGame()
+    g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
     g.current_player = g.player1
@@ -28,7 +27,7 @@ def test_check_score_sets_winner_at_or_above_100():
     assert g.winner is g.current_player
 
 def test_check_score_returns_false_below_100():
-    g = TestGame()
+    g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
     g.current_player = g.player1
@@ -38,7 +37,7 @@ def test_check_score_returns_false_below_100():
     assert g.winner is None
 
 def test_cheat_menu_exits_immediately_when_score_is_100():
-    g = TestGame()
+    g = make_game()
     g.player1 = Player("Player1")
     g.current_player = g.player1
     g.current_player.score = 100
@@ -46,13 +45,11 @@ def test_cheat_menu_exits_immediately_when_score_is_100():
     assert g.current_player.score == 100
 
 def test_show_cheat_menu_runs():
-    g = TestGame()
+    g = make_game()
     g.player1 = Player("Alice")
     g.current_player = g.player1
     g.current_player.score = 42
     g.show_cheat_menu()
-
-
 
 
 
