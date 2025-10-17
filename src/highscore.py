@@ -27,3 +27,14 @@ def add_score(name, score):
     # sort descending by score, keep top 3
     scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:3]
     save_scores(scores)
+
+def show_scores():
+    """Print the high score table."""
+    scores = load_scores()
+    if not scores:
+        print("\nNo highscores yet.\n")
+    else:
+        print("\n--- TOP 3 PLAYERS ---")
+        for i, s in enumerate(scores, start=1):
+            print(f"{i}. {s['name']} — {s['score']}")
+        print("----------------------")
