@@ -27,7 +27,7 @@ The project uses a `Makefile` for setup and tasks, a `menu.py` entry point for t
 Piggy/
 │
 ├── src/
-│   ├── manu.py          # Application entry point (main menu / CLI)
+│   ├── menu.py          # Application entry point (main menu / CLI)
 │   ├── highscore.py     # Highscore save
 │   ├── game.py          # Main game logic
 │   ├── player.py        # Player class
