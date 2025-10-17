@@ -25,3 +25,7 @@ class HighScore:
         scores.append({"name": name, "score": int(score)})
         scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:3]
         self._save(scores)
+    
+    def top(self):
+        return self._load()
+
