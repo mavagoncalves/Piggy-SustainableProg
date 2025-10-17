@@ -17,3 +17,11 @@ class HighScore:
     def save(self, scores):
         with open(self.file, "w") as f:
             json.dump(scores, f, indent=2)
+    
+    def add(self, name, score):
+        if not name:
+            return
+        scores = self._load()
+        scores.append({"name": name, "score": int(score)})
+        scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:3]
+        self._save(scores)
