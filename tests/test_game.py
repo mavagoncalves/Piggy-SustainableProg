@@ -51,6 +51,15 @@ def test_show_cheat_menu_runs():
     g.current_player.score = 42
     g.show_cheat_menu()
 
+def test_change_player_from_none_sets_player1():
+    """If current_player is None, change_player should default to player1."""
+    g = make_game()
+    g.player1 = Player("P1")
+    g.player2 = Player("P2")
+    g.current_player = None
+    g.change_player()
+    assert g.current_player is g.player1
+
 
 
 
