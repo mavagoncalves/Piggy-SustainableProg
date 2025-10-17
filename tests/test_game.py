@@ -60,6 +60,16 @@ def test_change_player_from_none_sets_player1():
     g.change_player()
     assert g.current_player is g.player1
 
+def test_run_returns_immediately_when_game_off():
+    """run() should exit right away if game_on is False (no loops, no errors)."""
+    g = make_game()
+    g.game_on = False
+    g.winner = None
+    # Should not raise and should not modify winner
+    g.run()
+    assert g.game_on is False
+    assert g.winner is None
+
 
 
 
