@@ -45,6 +45,13 @@ def test_cheat_menu_exits_immediately_when_score_is_100():
     g.cheat_menu()
     assert g.current_player.score == 100
 
+def test_show_cheat_menu_runs():
+    g = TestGame()
+    g.player1 = Player("Alice")
+    g.current_player = g.player1
+    g.current_player.score = 42
+    g.show_cheat_menu()
+
 
 
 
