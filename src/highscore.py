@@ -2,8 +2,11 @@ import json
 import os
 
 class HighScore:
-    def __init__(self, file_path=os.path.join("data", "highscore.json")):
-        self.file = file_path
+    def __init__(self):
+        base_dir = os.path.dirname(os.path.dirname(__file__))
+        data_dir = os.path.join(base_dir, "data")
+        os.makedirs(data_dir, exist_ok=True)
+        self.file = os.path.join(data_dir, "highscore.json")
     
     def load(self):
         if not os.path.exists(self.file):
