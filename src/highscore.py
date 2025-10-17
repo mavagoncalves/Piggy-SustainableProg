@@ -28,4 +28,14 @@ class HighScore:
     
     def top(self):
         return self._load()
+    
+    def show(self):
+        scores = self._load()
+        if not scores:
+            print("\nNo highscores yet.\n")
+            return
+        print("\n--- TOP 3 PLAYERS ---")
+        for i, s in enumerate(scores, start=1):
+            print(f"{i}. {s['name']} — {s['score']}")
+        print("----------------------")
 
