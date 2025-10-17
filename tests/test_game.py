@@ -27,6 +27,15 @@ def test_check_score_sets_winner_at_or_above_100():
     assert g.check_score() is True
     assert g.winner is g.current_player
 
+def test_check_score_returns_false_below_100():
+    g = TestGame()
+    g.player1 = Player("Player1")
+    g.player2 = Player("Player2")
+    g.current_player = g.player1
+    g.winner = None
+    g.current_player.score = 99
+    assert g.check_score() is False
+    assert g.winner is None
 
 
 
