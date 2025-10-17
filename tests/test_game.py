@@ -37,6 +37,14 @@ def test_check_score_returns_false_below_100():
     assert g.check_score() is False
     assert g.winner is None
 
+def test_cheat_menu_exits_immediately_when_score_is_100():
+    g = TestGame()
+    g.player1 = Player("Player1")
+    g.current_player = g.player1
+    g.current_player.score = 100
+    g.cheat_menu()
+    assert g.current_player.score == 100
+
 
 
 
