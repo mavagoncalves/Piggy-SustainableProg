@@ -14,3 +14,6 @@ class HighScore:
             except json.JSONDecodeError:
                 return []
 
+    def save(self, scores):
+        with open(self.file, "w") as f:
+            json.dump(scores, f, indent=2)
