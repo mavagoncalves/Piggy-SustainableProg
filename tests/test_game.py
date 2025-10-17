@@ -81,5 +81,21 @@ def test_winner_persists_after_player_change():
     assert g.current_player is g.player2
     assert g.winner is g.player1  # winner remains the same
 
+def test_check_score_does_not_clear_existing_winner_on_other_turn():
+    """
+    After one player wins, calling check_score for the other player (below 100)
+    should return False and keep the original winner intact.
+    """
+    g = make_game()
+    g.player1 = Player("A"); g.player1.score = 120
+    g.player2 = Player("B"); g.player2.score = 50
+    g.current_player = g.player1
+    assert g.check_score() is True
+    assert g.winner is g.player1
+
+    # Switch to the other player and verify winner doesn't change
+    g.current_player = g.player2
+    assert g.check_score() is False
+    assert g.winner is g.player1
 
 
