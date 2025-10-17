@@ -70,7 +70,16 @@ def test_run_returns_immediately_when_game_off():
     assert g.game_on is False
     assert g.winner is None
 
-
+def test_winner_persists_after_player_change():
+    """Once a winner is set, changing the current player shouldn't affect winner."""
+    g = make_game()
+    g.player1 = Player("Alice")
+    g.player2 = Player("Bob")
+    g.current_player = g.player1
+    g.winner = g.player1
+    g.change_player()
+    assert g.current_player is g.player2
+    assert g.winner is g.player1  # winner remains the same
 
 
 
