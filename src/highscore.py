@@ -12,3 +12,8 @@ def load_scores():
             return json.load(f)
         except json.JSONDecodeError:
             return []
+
+def save_scores(scores):
+    """Save list of score dicts to file."""
+    with open(FILE, "w") as f:
+        json.dump(scores, f, indent=2)
