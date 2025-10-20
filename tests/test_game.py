@@ -104,3 +104,21 @@ def test_check_score_above_100_sets_winner_and_returns_true():
     assert g.winner is g.player2
     assert g.winner.name == "Bob"
     assert g.winner.score == 150
+
+def test_run_exits_immediately_if_winner_already_set():
+    """
+    When a winner is already set before run(), the loop should not start and
+    current_player should remain unchanged.
+    """
+    g = make_game()
+    g.player1 = Player("A")
+    g.player2 = Player("B")
+    g.current_player = g.player1
+    g.winner = g.player2
+    g.game_on = True
+
+    g.run()
+
+    assert g.game_on is True
+    assert g.current_player is g.player1
+    assert g.winner is g.player2
