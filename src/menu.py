@@ -3,6 +3,7 @@ from src.game import Game
 
 class Menu:
     def __init__(self):
+        self.game = None
         self.running = True
 
     def display(self):
@@ -22,7 +23,8 @@ class Menu:
                 rules(self)
             elif choice == "2":
                 print("Loading Game...")
-                game = Game()
+                self.game = Game()
+                self.game.run()
             elif choice == "3":
                 print("Change Name:")
                 #Connect to name class when ready
