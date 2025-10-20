@@ -11,3 +11,10 @@ def test_save_and_load():
     result = hs.load()
     assert result == data
 
+def test_add_ignores_empty_name():
+    hs = HighScore()
+    hs.save([])
+    hs.add("", 50)
+    assert hs.load() == []
+
+
