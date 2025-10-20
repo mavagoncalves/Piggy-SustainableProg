@@ -21,3 +21,21 @@ def test_show_cheat_menu_runs():
      cheat = Cheat(g)
      cheat.current = g.current_player
      cheat.show_cheat_menu()
+
+def test_show_cheat_menu_prints_full_menu(capsys):
+     """show_cheat_menu() should print menu lines and current points."""
+     g = make_game()
+     g.player1 = Player("Tester")
+     g.current_player = g.player1
+     g.current_player.score = 77
+     cheat = Cheat(g)
+     cheat.current = g.current_player
+     cheat.show_cheat_menu()
+     out = capsys.readouterr().out
+
+     # Check key menu and the score
+     assert "WELCOME TO CHEAT MENU" in out
+     assert "- press 1 to add points" in out
+     assert "- press 2 to subtract points" in out
+     assert "- press 3 to quit the cheat  menu" in out
+     assert "Current points: 77" in out
