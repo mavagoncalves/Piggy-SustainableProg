@@ -44,3 +44,7 @@ def test_game_is_saved():
     game = "my_game"
     cheat = Cheat(game)
     assert cheat.game == "my_game"
+
+def test_current_is_none_initially():
+    cheat = Cheat("game")
+    assert cheat.current is None
