@@ -35,3 +35,15 @@ def test_keeps_only_top_three():
     assert len(top) == 3
     assert top[0]["score"] == 40
 
+def test_new_lower_score_goes_to_second_place():
+    hs = HighScore()
+    hs.save([])
+    hs.add("Alice", 100)
+    hs.add("Bob", 80)
+    top = hs.top()
+    assert top[0]["name"] == "Alice"
+    assert top[0]["score"] == 100
+    assert top[1]["name"] == "Bob"
+    assert top[1]["score"] == 80
+
+
