@@ -17,4 +17,9 @@ def test_add_ignores_empty_name():
     hs.add("", 50)
     assert hs.load() == []
 
-
+def test_add_casts_to_int():
+    hs = HighScore()
+    hs.save([])
+    hs.add("Alice", "50")
+    result = hs.top()
+    assert result == [{"name": "Alice", "score": 50}]
