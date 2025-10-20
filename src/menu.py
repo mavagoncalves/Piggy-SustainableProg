@@ -1,3 +1,6 @@
+from src.game import Game
+
+
 class Menu:
     def __init__(self):
         self.running = True
@@ -20,7 +23,7 @@ class Menu:
                 rules(self)
             elif choice == "2":
                 print("Loading Game...")
-                #Connect to game class when ready
+                game = Game()
             elif choice == "3":
                 print("Change Name:")
                 #Connect to name class when ready
