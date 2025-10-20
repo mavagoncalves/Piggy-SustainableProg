@@ -54,3 +54,8 @@ def test_game_can_be_any_object():
     g = DummyGame()
     cheat = Cheat(g)
     assert cheat.game is g
+
+def test_multiple_cheat_objects_independent():
+    c1 = Cheat("game1")
+    c2 = Cheat("game2")
+    assert c1.game != c2.game
