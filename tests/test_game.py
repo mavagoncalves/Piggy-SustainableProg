@@ -83,4 +83,11 @@ def test_check_score_does_not_clear_existing_winner_on_other_turn():
     assert g.check_score() is False
     assert g.winner is g.player1
 
-
+def test_change_player_from_player2_goes_back_to_player1():
+    """If it's player2's turn, change_player() should switch to player1."""
+    g = make_game()
+    g.player1 = Player("P1")
+    g.player2 = Player("P2")
+    g.current_player = g.player2
+    g.change_player()
+    assert g.current_player is g.player1
