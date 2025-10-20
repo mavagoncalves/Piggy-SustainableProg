@@ -19,7 +19,6 @@ class Menu:
             choice = input("Enter your choice: ")
 
             if choice == "1":
-                print("Rules:")
                 rules(self)
             elif choice == "2":
                 print("Loading Game...")
@@ -57,6 +56,8 @@ def rules(self):
 
 
 
-
+if __name__ == "__main__":
+    menu = Menu()
+    menu.run()
 
 
