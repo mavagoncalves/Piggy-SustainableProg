@@ -1,18 +1,20 @@
 from dice import Dice
 from player import Player
 from ai import AI
+from cheat import Cheat
 
 
 class Game:
     def __init__(self):
         self.player1 = Player(input('Enter name for Player 1: '))
         self.dice=Dice(6)
-        self.current_player=None #ASIGNAR A JUGADOR UNO DENTR ODE LAS OPCIONES SIGUIENTES, POR SI SE ESCOGE EXIT
+        self.current_player=None
         self.winner=None
         self.vs_ai=False
         self.ai_controller=None
         self.round_score=0
         self.game_on=True   #GAME RUNNING
+        self.cheats=Cheat(self) #Cheat class call
 
         mode=input("Choose mode:\n1) Two players \n2) Play vs AI\n3) Exit: ").strip()
         if mode=="1":
@@ -76,7 +78,7 @@ class Game:
                 return
             #   CHEAT MENU ACCESS (OPTION HIDDEN)
             elif choice=="cheats":
-                self.cheat_menu()
+                self.cheats.cheat_menu()    #calling the cheat_menu using the 'cheats' from init
                 continue
 
             #   GAME CONTINUES
@@ -140,55 +142,3 @@ class Game:
             print(f"{self.current_player.name} wins with {self.current_player.score} points.!")
             return True
         return False
-
-    def cheat_menu(self):
-
-        while True:
-            if self.current_player.score>=100:  #Checks of the player tries to get in again after being kicked out
-                print('Maximum score reached! Cheat menu will close now\n')
-                break
-            self.show_cheat_menu()
-            choice_cheats = input("Choose option: ")
-
-            if choice_cheats=="1":  # OPTION 1 - ADDING POINTS
-                try:
-                    score_cheat=int(input("Enter score to add: "))
-                except ValueError:
-                    print("Invalid choice, enter a number.")
-                    continue
-
-                if not (1<=score_cheat<=100):
-                    print("Invalid choice, enter value between 1-100")
-                    continue
-                self.current_player.add_score(score_cheat)
-                setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR PLAYER FOR CHEATS USED
-
-            elif choice_cheats=="2":    # OPTION 2 - SUBTRACTING POINTS
-                try:
-                    score_cheat=int(input("Enter score to subtract: "))
-                except ValueError:
-                    print("Invalid choice, enter a number.")
-                    continue
-                hypothetical_score = self.current_player.score - score_cheat
-
-                if not (1<=score_cheat<=100):
-                    print("Invalid choice, enter value between 1-100")
-                    continue
-                if hypothetical_score<0:
-                    print("Invalid choice, your score can't be less than 0")
-                    continue
-                self.current_player.score-=score_cheat
-                setattr(self.current_player, "cheat_use", True) #ATTRIBUTE CREATED FOR CHEATS USED
-
-            elif choice_cheats=="3":    # QUIT - JUST QUITTING lol
-                break
-            else:
-                print("Invalid option: please select '1', '2' or '3'.")
-
-
-    def show_cheat_menu(self):
-        print(f"""WELCOME TO CHEAT MENU
-            - press 1 to add points
-            - press 2 to subtract points
-            - press 3 to quit the cheat  menu
-            Current points: {self.current_player.score}""")

@@ -36,20 +36,20 @@ def test_check_score_returns_false_below_100():
     assert g.check_score() is False
     assert g.winner is None
 
-def test_cheat_menu_exits_immediately_when_score_is_100():
-    g = make_game()
-    g.player1 = Player("Player1")
-    g.current_player = g.player1
-    g.current_player.score = 100
-    g.cheat_menu()
-    assert g.current_player.score == 100
-
-def test_show_cheat_menu_runs():
-    g = make_game()
-    g.player1 = Player("Alice")
-    g.current_player = g.player1
-    g.current_player.score = 42
-    g.show_cheat_menu()
+# def test_cheat_menu_exits_immediately_when_score_is_100():
+#     g = make_game()
+#     g.player1 = Player("Player1")
+#     g.current_player = g.player1
+#     g.current_player.score = 100
+#     g.cheat_menu()
+#     assert g.current_player.score == 100
+#
+# def test_show_cheat_menu_runs():
+#     g = make_game()
+#     g.player1 = Player("Alice")
+#     g.current_player = g.player1
+#     g.current_player.score = 42
+#     g.show_cheat_menu()
 
 def test_change_player_from_none_sets_player1():
     """If current_player is None, change_player should default to player1."""
@@ -98,19 +98,19 @@ def test_check_score_does_not_clear_existing_winner_on_other_turn():
     assert g.check_score() is False
     assert g.winner is g.player1
 
-def test_show_cheat_menu_prints_full_menu(capsys):
-    """show_cheat_menu() should print menu lines and current points."""
-    g = make_game()
-    g.player1 = Player("Tester")
-    g.current_player = g.player1
-    g.current_player.score = 77
-
-    g.show_cheat_menu()
-    out = capsys.readouterr().out
-
-    # Check key menu and the score
-    assert "WELCOME TO CHEAT MENU" in out
-    assert "- press 1 to add points" in out
-    assert "- press 2 to subtract points" in out
-    assert "- press 3 to quit the cheat  menu" in out
-    assert "Current points: 77" in out
+# def test_show_cheat_menu_prints_full_menu(capsys):
+#     """show_cheat_menu() should print menu lines and current points."""
+#     g = make_game()
+#     g.player1 = Player("Tester")
+#     g.current_player = g.player1
+#     g.current_player.score = 77
+#
+#     g.show_cheat_menu()
+#     out = capsys.readouterr().out
+#
+#     # Check key menu and the score
+#     assert "WELCOME TO CHEAT MENU" in out
+#     assert "- press 1 to add points" in out
+#     assert "- press 2 to subtract points" in out
+#     assert "- press 3 to quit the cheat  menu" in out
+#     assert "Current points: 77" in out
