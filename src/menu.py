@@ -21,13 +21,13 @@ class Menu:
             choice = input("Enter your choice: ")
 
             if choice == "1":
-                rules(self)
+                self.rules(self)
             elif choice == "2":
                 print("Loading Game...")
                 self.game = Game()
                 self.game.run()
             elif choice == "3":
-                change_name(self)
+                self.change_name(self)
             elif choice == "4":
                 print("High Score:")
                 highscore = HighScore()
