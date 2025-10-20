@@ -1,4 +1,5 @@
 from src.game import Game
+from src.highscore import HighScore
 
 
 class Menu:
@@ -7,7 +8,7 @@ class Menu:
         self.running = True
 
     def display(self):
-        print("\n=== MAIN MENU ===")
+        print("=== MAIN MENU ===")
         print("1. Rules")
         print("2. New Game")
         print("3. Change Name")
@@ -29,7 +30,8 @@ class Menu:
                 change_name(self)
             elif choice == "4":
                 print("High Score:")
-                #Connect to high score class when ready
+                highscore = HighScore()
+                highscore.show()
             elif choice == "5":
                 print("Quitting...")
                 self.running = False
