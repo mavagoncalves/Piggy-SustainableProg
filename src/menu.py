@@ -26,7 +26,6 @@ class Menu:
                 self.game = Game()
                 self.game.run()
             elif choice == "3":
-                print("Change Name:")
                 change_name(self)
             elif choice == "4":
                 print("High Score:")
