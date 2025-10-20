@@ -1,7 +1,10 @@
 from src.highscore import HighScore
+import os
 
 def test_load_returns_empty():
     hs = HighScore()
+    if os.path.exists(hs.file):
+        os.remove(hs.file)
     assert hs.load() == []
 
 def test_save_and_load():
@@ -45,5 +48,17 @@ def test_new_lower_score_goes_to_second_place():
     assert top[0]["score"] == 100
     assert top[1]["name"] == "Bob"
     assert top[1]["score"] == 80
+
+def test_scores_sorted_descending():
+    hs = HighScore()
+    hs.save([])
+    hs.add("Alice", 5)
+    hs.add("Bob", 15)
+    hs.add("Charlie", 10)
+    top = hs.top()
+    assert len(top) == 3
+    assert top[0]["name"] == "Bob"
+    assert top[1]["name"] == "Charlie"
+    assert top[2]["name"] == "Alice"
 
 
