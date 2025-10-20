@@ -48,3 +48,9 @@ def test_game_is_saved():
 def test_current_is_none_initially():
     cheat = Cheat("game")
     assert cheat.current is None
+
+def test_game_can_be_any_object():
+    class DummyGame: pass
+    g = DummyGame()
+    cheat = Cheat(g)
+    assert cheat.game is g
