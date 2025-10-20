@@ -27,7 +27,7 @@ class Menu:
                 self.game.run()
             elif choice == "3":
                 print("Change Name:")
-                #Connect to name class when ready
+                change_name(self)
             elif choice == "4":
                 print("High Score:")
                 #Connect to high score class when ready
