@@ -69,3 +69,11 @@ def test_zero_and_negative_scores():
     hs.add("Positive", 2)
     scores = [s["score"] for s in hs.top()]
     assert scores == [2, 0, -5]
+
+def test_add_same_name_twice():
+    hs = HighScore()
+    hs.save([])  # reset file
+    hs.add("Bob", 10)
+    hs.add("Bob", 20)
+    names = [s["name"] for s in hs.top()]
+    assert names.count("Bob") >= 1
