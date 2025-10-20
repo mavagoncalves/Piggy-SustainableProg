@@ -61,4 +61,11 @@ def test_scores_sorted_descending():
     assert top[1]["name"] == "Charlie"
     assert top[2]["name"] == "Alice"
 
-
+def test_zero_and_negative_scores():
+    hs = HighScore()
+    hs.save([])  # reset file
+    hs.add("Zero", 0)
+    hs.add("Negative", -5)
+    hs.add("Positive", 2)
+    scores = [s["score"] for s in hs.top()]
+    assert scores == [2, 0, -5]
