@@ -39,3 +39,8 @@ def test_show_cheat_menu_prints_full_menu(capsys):
      assert "- press 2 to subtract points" in out
      assert "- press 3 to quit the cheat  menu" in out
      assert "Current points: 77" in out
+
+def test_game_is_saved():
+    game = "my_game"
+    cheat = Cheat(game)
+    assert cheat.game == "my_game"
