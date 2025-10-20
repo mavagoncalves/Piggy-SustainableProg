@@ -72,7 +72,7 @@ def test_zero_and_negative_scores():
 
 def test_add_same_name_twice():
     hs = HighScore()
-    hs.save([])  # reset file
+    hs.save([])
     hs.add("Bob", 10)
     hs.add("Bob", 20)
     names = [s["name"] for s in hs.top()]
