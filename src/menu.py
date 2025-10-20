@@ -54,6 +54,21 @@ def rules(self):
     print("6. 🏆 Winning:")
     print("- The first player to reach 100 or more points wins the game.")
 
+def change_name(self):
+    if not self.game:
+        print("No game in progress.")
+        return
+    print("Change Name:")
+    new_name1 = input(f"Enter new name for Player 1 ({self.game.player1.name}): ").strip()
+    if new_name1:
+        self.game.player1.change_name(new_name1)
+        print(f"Name of player 1 changed to {self.game.player1.name}")
+    new_name2 = input(f"Enter new name for Player 2 ({self.game.player2.name}): ").strip()
+    if new_name2:
+        self.game.player2.change_name(new_name2)
+        print(f"Name of player 2 changed to {self.game.player2.name}")
+
+
 
 
 
