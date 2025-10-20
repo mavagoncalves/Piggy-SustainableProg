@@ -24,16 +24,16 @@ class HighScore:
     def add(self, name, score):
         if not name:
             return
-        scores = self._load()
+        scores = self.load()
         scores.append({"name": name, "score": int(score)})
         scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:3]
-        self._save(scores)
+        self.save(scores)
     
     def top(self):
-        return self._load()
+        return self.load()
     
     def show(self):
-        scores = self._load()
+        scores = self.load()
         if not scores:
             print("\nNo highscores yet.\n")
             return
