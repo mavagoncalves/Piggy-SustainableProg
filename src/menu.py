@@ -2,6 +2,8 @@ from src.game import Game
 from src.highscore import HighScore
 
 
+#   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
+
 class Menu:
     def __init__(self):
         self.game = None
@@ -68,14 +70,3 @@ class Menu:
         if new_name2:
             self.game.player2.change_name(new_name2)
             print(f"Name of player 2 changed to {self.game.player2.name}")
-
-
-
-
-
-
-if __name__ == "__main__":
-    menu = Menu()
-    menu.run()
-
-
