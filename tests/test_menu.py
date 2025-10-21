@@ -1,10 +1,5 @@
 from src.menu import Menu
 from unittest.mock import patch
-import pytest
-
-
-    #   Command for Windows
-    #   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
 
 
 def test_menu_just_runs():
