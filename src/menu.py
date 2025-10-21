@@ -68,14 +68,3 @@ class Menu:
         if new_name2:
             self.game.player2.change_name(new_name2)
             print(f"Name of player 2 changed to {self.game.player2.name}")
-
-
-
-
-
-
-if __name__ == "__main__":
-    menu = Menu()
-    menu.run()
-
-
