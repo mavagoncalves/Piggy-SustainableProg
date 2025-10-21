@@ -2,6 +2,8 @@ from src.game import Game
 from src.highscore import HighScore
 
 
+#   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
+
 class Menu:
     def __init__(self):
         self.game = None
