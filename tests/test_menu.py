@@ -27,3 +27,12 @@ def test_menu_int_input_not_recognized():
     with patch("builtins.input", side_effect=[1,"5"]):
         # same as previous
         menu.run()
+
+def test_highscore_shown_when_option_4():
+    menu=Menu()
+    with patch("src.menu.HighScore.show") as mock:
+        #puts the show highscore as a mock
+        with patch("builtins.input", side_effect=["4","5"]):
+            menu.run()
+        assert mock.called
+        #checks the mock was called
