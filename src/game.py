@@ -71,8 +71,10 @@ class Game:
             if self.game_on and not self.winner:
                 self.change_player()
 
+                # CLI header
                 if hasattr(self, "ui_header") and callable(self.ui_header):
                     self.ui_header(self)
+
 
 
 
@@ -82,9 +84,6 @@ class Game:
             return
 
         self.round_score = 0
-        # CLI header
-        if hasattr(self, "ui_header") and callable(self.ui_header):
-            self.ui_header(self)
 
         print(f"\nIt is {self.current_player.name}'s turn.")
         print(f"{self.current_player.name} has {self.current_player.score} points.\n")
@@ -133,10 +132,6 @@ class Game:
 
     def ai_turn(self):
         """Plays a turn for the AI player"""
-        # CLI header
-        if hasattr(self, "ui_header") and callable(self.ui_header):
-            self.ui_header(self)
-
         print(f"{self.current_player.name} is playing")
         self.round_score = 0
 
