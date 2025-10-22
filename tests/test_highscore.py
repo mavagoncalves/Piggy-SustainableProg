@@ -2,12 +2,14 @@ from src.highscore import HighScore
 import os
 
 def test_load_returns_empty():
+    '''load() should return an empty list if file does not exist'''
     hs = HighScore()
     if os.path.exists(hs.file):
         os.remove(hs.file)
     assert hs.load() == []
 
 def test_save_and_load():
+    '''save() should write data that load() can read back correctly'''
     hs = HighScore()
     data = [["Alice", 100]]
     hs.save(data)
@@ -15,12 +17,14 @@ def test_save_and_load():
     assert result == data
 
 def test_add_ignores_empty_name():
+    '''add() should ignore entries with empty names'''
     hs = HighScore()
     hs.save([])
     hs.add("", 50)
     assert hs.load() == []
 
 def test_add_casts_to_int():
+    '''add() should cast score to int'''
     hs = HighScore()
     hs.save([])
     hs.add("Alice", "50")
@@ -28,6 +32,7 @@ def test_add_casts_to_int():
     assert result == [{"name": "Alice", "score": 50}]
 
 def test_keeps_only_top_three():
+    '''add() should keep only the top 3 high scores'''
     hs = HighScore()
     hs.save([])
     hs.add("Alice", 10)
@@ -39,6 +44,7 @@ def test_keeps_only_top_three():
     assert top[0]["score"] == 40
 
 def test_new_lower_score_goes_to_second_place():
+    '''A new score lower than the top but higher than others should be second'''
     hs = HighScore()
     hs.save([])
     hs.add("Alice", 100)
@@ -50,6 +56,7 @@ def test_new_lower_score_goes_to_second_place():
     assert top[1]["score"] == 80
 
 def test_scores_sorted_descending():
+    '''Scores should be sorted in descending order'''
     hs = HighScore()
     hs.save([])
     hs.add("Alice", 5)
@@ -62,6 +69,7 @@ def test_scores_sorted_descending():
     assert top[2]["name"] == "Alice"
 
 def test_zero_and_negative_scores():
+    '''Zero and negative scores should be handled correctly'''
     hs = HighScore()
     hs.save([])  # reset file
     hs.add("Zero", 0)
@@ -71,6 +79,7 @@ def test_zero_and_negative_scores():
     assert scores == [2, 0, -5]
 
 def test_add_same_name_twice():
+    '''Adding the same name twice should keep both entries if scores differ'''
     hs = HighScore()
     hs.save([])
     hs.add("Bob", 10)
@@ -79,6 +88,7 @@ def test_add_same_name_twice():
     assert names.count("Bob") >= 1
 
 def test_scores_sorted_even_if_added_unsorted():
+    '''Scores should be sorted correctly even if added in unsorted order'''
     hs = HighScore()
     hs.save([])
     hs.add("Low", 10)

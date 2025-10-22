@@ -7,6 +7,7 @@ def make_game():
     return game.Game.__new__(game.Game)
 
 def test_change_player_switches_between_players():
+    '''change_player() should switch current_player between player1 and player2'''
     g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
@@ -17,6 +18,7 @@ def test_change_player_switches_between_players():
     assert g.current_player is g.player1
 
 def test_check_score_sets_winner_at_or_above_100():
+    '''check_score() should set winner and return True if score is 100 or more'''
     g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
@@ -27,6 +29,7 @@ def test_check_score_sets_winner_at_or_above_100():
     assert g.winner is g.current_player
 
 def test_check_score_returns_false_below_100():
+    '''check_score() should return False if score is below 100 and not set winner'''
     g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
