@@ -17,6 +17,7 @@ def scoreboard_header(game: Game):
     print("======================\n")
 
 class PiggyCLI(cmd.Cmd):
+    '''Command-line interface for Piggy game'''
     intro = "Welcome to Piggy! Type 'menu' to see commands."
     prompt = "piggy> "
 
@@ -26,11 +27,13 @@ class PiggyCLI(cmd.Cmd):
         self.game: Game | None = None
 
     def _bind_game(self, g: Game):
+        '''Binds a Game instance to the CLI and Menu'''
         self.game = g
         self.menu.game = g
         setattr(self.game, "ui_header", scoreboard_header)
 
     def _need_game(self) -> bool:
+        '''Helper to ensure a game is active'''
         if self.game is None:
             print("No game yet. Start one with: new")
             return False
@@ -90,4 +93,5 @@ class PiggyCLI(cmd.Cmd):
         return input(arg)
 
     def emptyline(self):
+        '''Do nothing on empty input line.'''
         pass
