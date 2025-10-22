@@ -2,75 +2,52 @@ from src.game import Game
 from src.highscore import HighScore
 
 class Menu:
-    '''Menu class to handle the main menu interactions
+    '''Menu class to support PiggyCLI commands
     Attributes:
     - game: Game object to manage the current game
+    - cli: PiggyCLI object for input/output
     '''
-    def __init__(self):
+    def __init__(self, cli=None):
         self.game = None
-        self.running = True
+        self.cli = cli
 
     def display(self):
-        '''Displays the main menu options'''
-        print("=== MAIN MENU ===")
-        print("1. Rules")
-        print("2. New Game")
-        print("3. Change Name")
-        print("4. High Score")
-        print("5. Quit")
-
-    def run(self):
-        '''Runs the main menu loop'''
-        while self.running:
-            self.display()
-            choice = input("Enter your choice: ")
-
-            if choice == "1":
-                self.rules()
-            elif choice == "2":
-                print("Loading Game...")
-                self.game = Game()
-                self.game.run()
-            elif choice == "3":
-                self.change_name()
-            elif choice == "4":
-                print("High Score:")
-                highscore = HighScore()
-                highscore.show()
-            elif choice == "5":
-                print("Quitting...")
-                self.running = False
-            else:
-                print("Invalid choice. Please enter a number between 1 and 5.")
+        '''Returns main menu options as a string'''
+        return "\n".join([
+            "=== MAIN MENU ===",
+            "menu: Show this menu",
+            "rules: Show game rules",
+            "new: Start a new game",
+            "change_name: Change player names",
+            "highscore: View high scores",
+            "score: View current scores",
+            "play: Play the game",
+            "quit: Exit the game"
+        ])
 
     def rules(self):
-        '''Displays the game rules'''
-        print("Rules:")
-        print("1. Players: 2 players take turns.")
-        print("2. Goal: Be the first to reach 100 points.")
-        print("3. On your turn:")
-        print("- Roll a single 6-sided die as many times as you want.")
-        print("- Each roll adds its value to your turn total.")
-        print("4. If you roll a 1:")
-        print("- Your turn ends immediately.")
-        print("- You lose all points earned in that turn.")
-        print("- Your overall score stays the same.")
-        print("5. If you “Hold”:")
-        print("- Add your turn total to your overall score.")
-        print("- Pass the die to the next player.")
-        print("6. Winning:")
-        print("- The first player to reach 100 or more points wins the game.")
+        '''Returns game rules as a string'''
+        return "\n".join([
+            "Rules:",
+            "1. Two players take turns rolling a 6-sided die.",
+            "2. Goal: Reach 100 points first.",
+            "3. Each roll adds to your turn total.",
+            "4. Roll a 1: Lose turn points, turn ends.",
+            "5. Hold: Add turn total to your score, pass turn.",
+            "6. First to 100 points wins."
+        ])
 
     def change_name(self):
+        '''Changes player names via PiggyCLI, returns result'''
         if not self.game:
-            print("No game in progress.")
-            return
-        print("Change Name:")
-        new_name1 = input(f"Enter new name for Player 1 ({self.game.player1.name}): ").strip()
-        if new_name1:
-            self.game.player1.change_name(new_name1)
-            print(f"Name of player 1 changed to {self.game.player1.name}")
-        new_name2 = input(f"Enter new name for Player 2 ({self.game.player2.name}): ").strip()
-        if new_name2:
-            self.game.player2.change_name(new_name2)
-            print(f"Name of player 2 changed to {self.game.player2.name}")
+            return "No game in progress."
+        result = []
+        name1 = self.cli.onecmd(f"input Enter new name for Player 1 ({self.game.player1.name}): ").strip()
+        if name1:
+            self.game.player1.change_name(name1)
+            result.append(f"Player 1 name changed to {self.game.player1.name}")
+        name2 = self.cli.onecmd(f"input Enter new name for Player 2 ({self.game.player2.name}): ").strip()
+        if name2:
+            self.game.player2.change_name(name2)
+            result.append(f"Player 2 name changed to {self.game.player2.name}")
+        return "\n".join(result) if result else "No names changed."
