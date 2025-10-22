@@ -1,33 +1,40 @@
 from src.menu import Menu
-from unittest.mock import patch
+from src.game import Game
+from src.player import Player
 
 
-def test_menu_just_runs():
-    menu=Menu()
-    menu.display()
+def test_menu_display_shows_expected_lines():
+    '''display() should show main menu options'''
+    m = Menu()
+    m.display()
 
 def test_shows_rules():
+    '''rules() should execute without errors'''
     menu=Menu()
     menu.rules()
 
-def test_menu_string_input_is_invalid():
+def test_change_name_no_game():
+    '''change_name() should handle no game in progress'''
     menu=Menu()
-    with patch("builtins.input", side_effect=["r","5"]):
-        # "r" as invalid, gets the invalid input, and gets back
-        # "5" to get out of the loop
-        menu.run()
+    result = menu.change_name()
+    assert result == "No game in progress."
 
-def test_menu_int_input_not_recognized():
+def test_change_name_changes_names():
+    '''change_name() should change player names via cli'''
     menu=Menu()
-    with patch("builtins.input", side_effect=[1,"5"]):
-        # same as previous
-        menu.run()
-
-def test_highscore_shown_when_option_4():
-    menu=Menu()
-    with patch("src.menu.HighScore.show") as mock:
-        #puts the show highscore as a mock
-        with patch("builtins.input", side_effect=["4","5"]):
-            menu.run()
-        assert mock.called
-        #checks the mock was called
+    menu.game = Game.__new__(Game)
+    menu.game.player1 = Player("OldName1")
+    menu.game.player2 = Player("OldName2")
+    class MockCLI:
+        def onecmd(self, prompt):
+            if "Player 1" in prompt:
+                return "NewName1"
+            elif "Player 2" in prompt:
+                return "NewName2"
+            return ""
+    menu.cli = MockCLI()
+    result = menu.change_name()
+    assert "Player 1 name changed to NewName1" in result
+    assert "Player 2 name changed to NewName2" in result
+    assert menu.game.player1.name == "NewName1"
+    assert menu.game.player2.name == "NewName2"

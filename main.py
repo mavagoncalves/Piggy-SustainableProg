@@ -1,12 +1,9 @@
-from src.menu import Menu
+from src.cli import PiggyCLI
 
-class Main:
-    def __init__(self):
-        self.menu = Menu()
-
-    def run(self):
-        self.menu.run()
+def main():
+    """Entry point for the Piggy game."""
+    cli = PiggyCLI()
+    cli.cmdloop()
 
 if __name__ == "__main__":
-    app = Main()
-    app.run()
+    main()
