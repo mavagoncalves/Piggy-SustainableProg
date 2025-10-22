@@ -2,6 +2,10 @@ import json
 import os
 
 class HighScore:
+    '''HighScore class to manage game high scores
+    Attributes:
+    - file: String path to the highscore JSON file
+    '''
     def __init__(self):
         base_dir = os.path.dirname(os.path.dirname(__file__))
         data_dir = os.path.join(base_dir, "data")
@@ -9,6 +13,7 @@ class HighScore:
         self.file = os.path.join(data_dir, "highscore.json")
     
     def load(self):
+        '''Loads high scores from the JSON file'''
         if not os.path.exists(self.file):
             return []
         with open(self.file, "r") as f:
@@ -18,10 +23,12 @@ class HighScore:
                 return []
 
     def save(self, scores):
+        '''Saves high scores to the JSON file'''
         with open(self.file, "w") as f:
             json.dump(scores, f, indent=2)
     
     def add(self, name, score):
+        '''Adds a new high score if it qualifies for the top 3'''
         if not name:
             return
         scores = self.load()
@@ -29,10 +36,8 @@ class HighScore:
         scores = sorted(scores, key=lambda x: x["score"], reverse=True)[:3]
         self.save(scores)
     
-    def top(self):
-        return self.load()
-    
     def show(self):
+        '''Displays the top 3 high scores'''
         scores = self.load()
         if not scores:
             print("\nNo highscores yet.\n")

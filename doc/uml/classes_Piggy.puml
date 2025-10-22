@@ -1,0 +1,71 @@
+@startuml classes_Piggy
+set namespaceSeparator none
+class "AI" as src.ai.AI {
+  difficulty
+  goal : int
+  __init__(difficulty, goal)
+  decide_difficulty(myscore, opponent_score, turn_score)
+  easy(myscore, opponent_score, turn_score)
+  hard(myscore, opponent_score, turn_score)
+  medium(myscore, opponent_score, turn_score)
+}
+class "Cheat" as src.cheat.Cheat {
+  current : NoneType
+  game
+  __init__(game)
+  cheat_menu()
+  show_cheat_menu()
+}
+class "Dice" as src.dice.Dice {
+  icon : NoneType
+  value : int
+  __init__(sides)
+  face()
+  roll()
+  turn()
+}
+class "Game" as src.game.Game {
+  ai_controller : NoneType
+  cheats
+  current_player : NoneType
+  dice
+  game_on : bool
+  player1
+  player2
+  round_score : int
+  vs_ai : bool
+  winner : NoneType
+  __init__()
+  ai_turn()
+  change_player()
+  check_score()
+  plays_turn()
+  run()
+}
+class "HighScore" as src.highscore.HighScore {
+  file
+  __init__()
+  add(name, score)
+  load()
+  save(scores)
+  show()
+  top()
+}
+class "Menu" as src.menu.Menu {
+  game : NoneType
+  running : bool
+  __init__()
+  change_name()
+  display()
+  rules()
+  run()
+}
+class "Player" as src.player.Player {
+  name
+  score : int
+  __init__(name)
+  add_score(points)
+  change_name(new_name)
+}
+src.game.Game --* src.menu.Menu : game
+@enduml
