@@ -2,6 +2,7 @@ from src.dice import Dice
 from src.player import Player
 from src.ai import AI
 from src.cheat import Cheat
+from src.highscore import HighScore
 
 
 class Game:
@@ -29,7 +30,7 @@ class Game:
         self.game_on=True   #GAME RUNNING
         self.cheats=Cheat(self) #Cheat class call
 
-        mode=input("Choose mode:\n1) Two players \n2) Play vs AI\n3) Exit: ").strip()
+        mode=input("----------GAME MODES----------\n1) PvP \n2) PvAI \n3) Exit \nYour choice: ").strip()
         if mode=="1":
             self.player2 = Player(input('Enter name for Player 2: '))
             self.current_player = self.player1
@@ -165,9 +166,11 @@ class Game:
 
 
     def check_score(self):
-        '''Checks if the current player has won'''
-        if self.current_player.score>=100:
-            self.winner=self.current_player
-            print(f"{self.current_player.name} wins with {self.current_player.score} points.!")
+        """Check if the current player has won."""
+        if self.current_player.score >= 100:
+            print(f"\n{self.current_player.name} wins with {self.current_player.score} points!\n")
+            hs = HighScore()
+            hs.add(self.current_player.name, self.current_player.score)
+            self.game_on = False
             return True
         return False
