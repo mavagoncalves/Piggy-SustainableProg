@@ -69,17 +69,8 @@ doc: venv
 	"$(PY)" -c "import sys, runpy, importlib.util; sys.path.insert(0, r'src'); sys.argv=['pdoc','-o', r'doc/api','--docformat','google','--no-show-source', r'src']; m='pdoc.__main__'; runpy.run_module(m if importlib.util.find_spec(m) else 'pdoc', run_name='__main__'); print('✓ API documentation: doc/api/index.html')"
 
 # Generate UML diagrams as PNGs into doc/uml (no Graphviz, no pyreverse)
-uml: venv
-	@mkdir -p "$(UML_DIR)"
-	@echo "• Building class diagram (.puml via py2puml) ..."
-	"$(PY)" -m $(PY2PUML_MOD) "$(SRC_ABS)" "$(UML_DIR)/classes_$(PROJECT).puml"
-	@echo "• Rendering class diagram to PNG via PlantUML server ..."
-	"$(PY)" -c "import requests, pathlib; p=pathlib.Path(r'$(UML_DIR)/classes_$(PROJECT).puml'); png=p.with_suffix(p.suffix + '.png'); r=requests.post('https://www.planttext.com/api/plantuml/png', files={'file': ('classes.puml', p.read_bytes())}); r.raise_for_status(); png.write_bytes(r.content); print('✓ Class diagram PNG:', png)"
-	@echo "• Building package dependency DOT via pydeps ..."
-	"$(PY)" -m $(PYDEPS_CMD) --noshow --no-output --show-dot --dot-output "$(UML_DIR)/packages_$(PROJECT).dot" "$(SRC_ABS)"
-	@echo "• Rendering package diagram DOT -> PNG via QuickChart Graphviz ..."
-	"$(PY)" -c "import json, requests, pathlib; f=pathlib.Path(r'$(UML_DIR)/packages_$(PROJECT).dot'); png=f.with_suffix('.png'); r=requests.post('https://quickchart.io/graphviz', json={'graph': f.read_text(encoding='utf-8'), 'layout': 'dot', 'format': 'png'}); r.raise_for_status(); png.write_bytes(r.content); print('✓ Package diagram PNG:', png)"
-	@echo "✓ UML generated in: $(UML_DIR)"
+ uml:
+	"$(PY)" tools/uml_build.py --project "$(PROJECT)" --src "$(SRC)" --out "$(UML_DIR)"
 
 # Build both API docs and UML PNGs
 docs: doc uml

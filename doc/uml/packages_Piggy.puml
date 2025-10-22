@@ -1,0 +1,25 @@
+@startuml packages_Piggy
+set namespaceSeparator none
+package "src" as src {
+}
+package "src.ai" as src.ai {
+}
+package "src.cheat" as src.cheat {
+}
+package "src.dice" as src.dice {
+}
+package "src.game" as src.game {
+}
+package "src.highscore" as src.highscore {
+}
+package "src.menu" as src.menu {
+}
+package "src.player" as src.player {
+}
+src.game --> src.ai
+src.game --> src.cheat
+src.game --> src.dice
+src.game --> src.player
+src.menu --> src.game
+src.menu --> src.highscore
+@enduml
