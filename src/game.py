@@ -1,7 +1,7 @@
-from dice import Dice
-from player import Player
-from ai import AI
-from cheat import Cheat
+from src.dice import Dice
+from src.player import Player
+from src.ai import AI
+from src.cheat import Cheat
 
 
 class Game:
