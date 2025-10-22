@@ -164,13 +164,33 @@ class Game:
         else:
             self.current_player=self.player1
 
-
     def check_score(self):
-        """Check if the current player has won."""
+        """Check if current player won, announce result, and save human wins only."""
         if self.current_player.score >= 100:
             print(f"\n{self.current_player.name} wins with {self.current_player.score} points!\n")
+
+            # Figure out opponent
+            opponent = self.player2 if self.current_player is self.player1 else self.player1
+
+            # If AI wins, don't save to highscores
+            ai_won = (
+                isinstance(self.current_player, AI)
+                or getattr(self.current_player, "is_ai", False)
+                or str(self.current_player.name).strip().lower() in {"ai", "computer", "cpu"}
+            )
+            if ai_won:
+                self.game_on = False
+                return True
+
+            # Human winner -> save result ranked by margin
             hs = HighScore()
-            hs.add(self.current_player.name, self.current_player.score)
+            hs.add_result(
+                winner_name=self.current_player.name,
+                winner_score=self.current_player.score,
+                opponent_name=opponent.name,
+                opponent_score=opponent.score,
+            )
             self.game_on = False
             return True
+
         return False
