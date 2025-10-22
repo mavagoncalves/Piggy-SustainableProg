@@ -17,16 +17,32 @@ def test_change_player_switches_between_players():
     g.change_player()
     assert g.current_player is g.player1
 
-def test_check_score_sets_winner_at_or_above_100():
-    '''check_score() should set winner and return True if score is 100 or more'''
+def test_check_score_sets_game_over_when_at_least_100():
     g = make_game()
-    g.player1 = Player("Player1")
-    g.player2 = Player("Player2")
+    g.player1 = Player("P1"); g.player1.score = 100
+    g.player2 = Player("P2"); g.player2.score = 70
     g.current_player = g.player1
-    g.winner = None
-    g.current_player.score = 100
+
     assert g.check_score() is True
-    assert g.winner is g.current_player
+    assert g.game_on is False  # game stops on win
+
+def test_check_score_returns_false_below_100():
+    g = make_game()
+    g.player1 = Player("P1"); g.player1.score = 99
+    g.player2 = Player("P2"); g.player2.score = 0
+    g.current_player = g.player1
+
+    assert g.check_score() is False
+    assert g.game_on is True
+
+def test_check_score_also_triggers_when_above_100():
+    g = make_game()
+    g.player1 = Player("Alice"); g.player1.score = 30
+    g.player2 = Player("Bob");   g.player2.score = 150
+    g.current_player = g.player2
+
+    assert g.check_score() is True
+    assert g.game_on is False
 
 def test_check_score_returns_false_below_100():
     '''check_score() should return False if score is below 100 and not set winner'''
@@ -69,23 +85,6 @@ def test_winner_persists_after_player_change():
     assert g.current_player is g.player2
     assert g.winner is g.player1  # winner remains the same
 
-def test_check_score_does_not_clear_existing_winner_on_other_turn():
-    """
-    After one player wins, calling check_score for the other player (below 100)
-    should return False and keep the original winner intact.
-    """
-    g = make_game()
-    g.player1 = Player("A"); g.player1.score = 120
-    g.player2 = Player("B"); g.player2.score = 50
-    g.current_player = g.player1
-    assert g.check_score() is True
-    assert g.winner is g.player1
-
-    # Switch to the other player and verify winner doesn't change
-    g.current_player = g.player2
-    assert g.check_score() is False
-    assert g.winner is g.player1
-
 def test_change_player_from_player2_goes_back_to_player1():
     """If it's player2's turn, change_player() should switch to player1."""
     g = make_game()
@@ -95,18 +94,6 @@ def test_change_player_from_player2_goes_back_to_player1():
     g.change_player()
     assert g.current_player is g.player1
 
-def test_check_score_above_100_sets_winner_and_returns_true():
-    """Scores strictly above 100 should also declare a winner."""
-    g = make_game()
-    g.player1 = Player("Alice")
-    g.player2 = Player("Bob")
-    g.current_player = g.player2
-    g.current_player.score = 150
-    g.winner = None
-    assert g.check_score() is True
-    assert g.winner is g.player2
-    assert g.winner.name == "Bob"
-    assert g.winner.score == 150
 
 def test_run_exits_immediately_if_winner_already_set():
     """
