@@ -57,90 +57,109 @@ class Game:
             return
 
 
-    def run(self):  #Main function to run the whole thing
-        '''Runs the game loop until there is a winner or the game is ended'''
+    def run(self):
+        """Runs the game loop until there is a winner or the game is ended"""
         if not self.game_on:
             return
-        while self.game_on and not self.winner: #Checking the game is on and there is NO winner
-            self.plays_turn()   #Plays whole turn
+        
+        if hasattr(self, "ui_header") and callable(self.ui_header):
+            self.ui_header(self)
 
-            if not self.winner:
+        while self.game_on and not self.winner:
+            self.plays_turn()  # play exactly one turn for current_player
+
+            if self.game_on and not self.winner:
                 self.change_player()
+
+                if hasattr(self, "ui_header") and callable(self.ui_header):
+                    self.ui_header(self)
+
 
 
     def plays_turn(self):
-        '''Plays a single turn for the current player'''
-        if not self.game_on:    #checking the game is running
+        """Plays a single turn for the current player"""
+        if not self.game_on:
             return
 
-        self.round_score=0 #RESTARTS THE ROUND SCORE WITH EACH START
-        print(f"\nIt is {self.current_player.name}'s turn.")
-        print(f"{self.current_player.name} has {self.current_player.score} points.\n") #POINTS REMINDER
+        self.round_score = 0
+        # CLI header
+        if hasattr(self, "ui_header") and callable(self.ui_header):
+            self.ui_header(self)
 
-        if self.vs_ai and self.current_player ==self.player2:   #Checking it is the ai turn, it runs the function
+        print(f"\nIt is {self.current_player.name}'s turn.")
+        print(f"{self.current_player.name} has {self.current_player.score} points.\n")
+
+        # run() does the flip.
+        if self.vs_ai and self.current_player == self.player2:
             self.ai_turn()
             return
 
-
-        #TURN STARTS
         while True:
-            choice=input("Press 'r' to roll or 'q' to quit").strip().lower()
+            if self.round_score > 0:
+                print(f"Current round points: {self.round_score}")
 
-            if choice=="q":
-                print("Game ended without winner!")
-                self.game_on=False  #Closes the game before quitting
-                return
-            #   CHEAT MENU ACCESS (OPTION HIDDEN)
-            elif choice=="cheats":
-                self.cheats.cheat_menu()    #calling the cheat_menu using the 'cheats' from init
+            choice = input("Choose: roll (r), hold (h), or quit (q): ").strip().lower()
+
+            if choice == "cheats":
+                self.cheats.cheat_menu()
                 continue
 
-            #   GAME CONTINUES
-            roll=self.dice.roll() # ROLLS THE DICE AND GETS A VALUE, STORED IN VARIABLE
-            print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}") #   PRINTS THE VALUE + ICON
+            if choice in ("q", "quit"):
+                print("Game ended without winner!")
+                self.game_on = False
+                return
 
-            if roll!=1: #CONTINUES
+            if choice in ("h", "hold"):
+                if self.round_score == 0:
+                    print("You can't hold 0 points. Roll first.")
+                    continue
+                self.current_player.add_score(self.round_score)
+                if self.check_score():  # may set winner and stop the game loop
+                    return
+                return
+
+            if choice in ("r", "roll"):
+                roll = self.dice.roll()
+                print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}")
+
+                if roll == 1:
+                    print(f"{self.current_player.name} rolled a 1 and loses the turn!")
+                    return
+
                 self.round_score += roll
-                print(f"Current round points: {self.round_score}")
-                choice=input("Roll again or hold? (r/h)").strip().lower()
+                continue
 
-                if choice in ["hold","h"]:
-                    self.current_player.add_score(self.round_score)
-                    if self.check_score():  #CHECKS SCORE TO END GAME
-                        return
-                    break
-                elif choice not in ["roll", "r"]:
-                    print("Invalid choice, please write 'r', 'roll', 'h' or 'hold'")
+            print("Invalid choice. Please enter 'r' to roll, 'h' to hold, or 'q' to quit.")
 
-            else: #LOOSES TURN
-                print(f"{self.current_player.name} lost the score and the turn!")
-                self.change_player()  # CHANGES PLAYER FOR NEXT TURN
-                break
+    def ai_turn(self):
+        """Plays a turn for the AI player"""
+        # CLI header
+        if hasattr(self, "ui_header") and callable(self.ui_header):
+            self.ui_header(self)
 
-
-    def ai_turn(self):  #AI'S TURN
-        '''Plays a turn for the AI player'''
         print(f"{self.current_player.name} is playing")
-        self.round_score=0
+        self.round_score = 0
 
         while True:
-            opponent=self.player1 if self.current_player==self.player2 else self.player2
-            decision=self.ai_controller.decide_difficulty(self.current_player.score, opponent.score,self.round_score)
-            roll=self.dice.roll()
+            opponent = self.player1 if self.current_player == self.player2 else self.player2
+            decision = self.ai_controller.decide_difficulty(
+                self.current_player.score, opponent.score, self.round_score
+            )
+            roll = self.dice.roll()
             print(f"{self.current_player.name} rolled a {self.dice.face()} -> {roll}")
 
-            if roll==1: #LOOSES TURN
+            if roll == 1:
                 print(f"{self.current_player.name} lost the score and the turn!")
-                return
-            self.round_score += roll
-            print(f"AI round points: {self.round_score} (decision:{decision})")
+                return  # run() will change player
 
-            if decision=="hold":
+            self.round_score += roll
+            print(f"AI round points: {self.round_score} (decision: {decision})")
+
+            if decision == "hold":
                 self.current_player.add_score(self.round_score)
                 if self.check_score():
                     return
-                break
-
+                return
 
     def change_player(self):
         '''Switches the current player'''
