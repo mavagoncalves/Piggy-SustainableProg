@@ -1,5 +1,5 @@
 # -------------------------------------
-# Makefile for Pig (Dice Game) Project
+# Makefile for Piggy (Dice Game) Project
 # Cross-platform (macOS/Linux/Windows)
 # -------------------------------------
 
@@ -38,10 +38,7 @@ clean:
 
 
 # -------------------------------------
-# Documentation (cross-platform, no Graphviz/pyreverse)
-# - API docs: pdoc -> doc/api
-# - UML class diagram: py2puml (.puml) -> PlantUML server -> PNG
-# - UML package diagram: pydeps (.dot) -> QuickChart Graphviz -> PNG
+#             Documentation 
 # -------------------------------------
 
 DOC_DIR   ?= doc

@@ -5,6 +5,19 @@ from src.cheat import Cheat
 
 
 class Game:
+    '''Main Game class to control the game flow
+    Attributes:
+    - player1: Player object for player 1
+    - player2: Player object for player 2 or AI
+    - dice: Dice object to roll the dice
+    - current_player: Player object for the current player
+    - winner: Player object for the winner
+    - vs_ai: Boolean to check if playing against AI
+    - ai_controller: AI object to control the AI player
+    - round_score: Integer to keep track of the current round score
+    - game_on: Boolean to check if the game is running
+    - cheats: Cheat object to handle cheat codes
+    '''
     def __init__(self):
         self.player1 = Player(input('Enter name for Player 1: '))
         self.dice=Dice(6)
@@ -45,7 +58,7 @@ class Game:
 
 
     def run(self):  #Main function to run the whole thing
-
+        '''Runs the game loop until there is a winner or the game is ended'''
         if not self.game_on:
             return
         while self.game_on and not self.winner: #Checking the game is on and there is NO winner
@@ -56,6 +69,7 @@ class Game:
 
 
     def plays_turn(self):
+        '''Plays a single turn for the current player'''
         if not self.game_on:    #checking the game is running
             return
 
@@ -105,6 +119,7 @@ class Game:
 
 
     def ai_turn(self):  #AI'S TURN
+        '''Plays a turn for the AI player'''
         print(f"{self.current_player.name} is playing")
         self.round_score=0
 
@@ -128,7 +143,7 @@ class Game:
 
 
     def change_player(self):
-
+        '''Switches the current player'''
         if self.current_player==self.player1:
             self.current_player=self.player2
         else:
@@ -136,7 +151,7 @@ class Game:
 
 
     def check_score(self):
-
+        '''Checks if the current player has won'''
         if self.current_player.score>=100:
             self.winner=self.current_player
             print(f"{self.current_player.name} wins with {self.current_player.score} points.!")

@@ -1,15 +1,17 @@
 from src.game import Game
 from src.highscore import HighScore
 
-
-#   $env:PYTHONPATH="."; .venv\Scripts\pytest.exe -v
-
 class Menu:
+    '''Menu class to handle the main menu interactions
+    Attributes:
+    - game: Game object to manage the current game
+    '''
     def __init__(self):
         self.game = None
         self.running = True
 
     def display(self):
+        '''Displays the main menu options'''
         print("=== MAIN MENU ===")
         print("1. Rules")
         print("2. New Game")
@@ -18,6 +20,7 @@ class Menu:
         print("5. Quit")
 
     def run(self):
+        '''Runs the main menu loop'''
         while self.running:
             self.display()
             choice = input("Enter your choice: ")
@@ -41,6 +44,7 @@ class Menu:
                 print("Invalid choice. Please enter a number between 1 and 5.")
 
     def rules(self):
+        '''Displays the game rules'''
         print("Rules:")
         print("1. Players: 2 players take turns.")
         print("2. Goal: Be the first to reach 100 points.")

@@ -1,9 +1,14 @@
 class Cheat:
+    '''Cheat class to handle cheat codes during the game
+    Attributes:
+    - game: Game object to access game state
+    - current: Player object for the current player using cheats'''
     def __init__(self,game):
         self.game=game
         self.current = None #Renaming for shorter name
 
     def cheat_menu(self):
+        '''Displays the cheat menu and processes user input'''
         while True:
             self.current=self.game.current_player   #Local access
             if self.current.score >= 100:  # Checks of the player tries to get in again after being kicked out
@@ -49,6 +54,7 @@ class Cheat:
 
 
     def show_cheat_menu(self):
+        '''Displays the cheat menu options'''
         print(f"""WELCOME TO CHEAT MENU
             - press 1 to add points
             - press 2 to subtract points

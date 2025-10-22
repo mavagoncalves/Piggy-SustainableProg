@@ -1,11 +1,17 @@
 import random
 
 class AI:
+    '''AI controller for Piggy game with different difficulty levels
+    Attributes:
+    - difficulty: String indicating the difficulty level ('easy', 'medium', 'hard')
+    - goal: Integer indicating the score needed to win (default 100)
+    '''
     def __init__(self, difficulty, goal=100):
         self.difficulty = difficulty.lower()
         self.goal = goal
 
     def decide_difficulty(self, myscore, opponent_score, turn_score):
+        '''Decides whether to 'roll' or 'hold' based on difficulty level'''
         if self.difficulty == 'easy':
             return self.easy(myscore, opponent_score, turn_score)
         elif self.difficulty == 'medium':
