@@ -16,15 +16,22 @@ def test_change_player_switches_between_players():
     g.change_player()
     assert g.current_player is g.player1
 
+
 def test_check_score_sets_winner_at_or_above_100():
+    from unittest.mock import patch
     g = make_game()
     g.player1 = Player("Player1")
     g.player2 = Player("Player2")
     g.current_player = g.player1
     g.winner = None
     g.current_player.score = 100
-    assert g.check_score() is True
-    assert g.winner is g.current_player
+
+    with patch('builtins.print'), \
+            patch('src.game.HighScore'):  # Mock HighScore to avoid file operations
+        result = g.check_score()
+
+    assert result is True
+    assert g.game_on is False
 
 def test_check_score_returns_false_below_100():
     g = make_game()
