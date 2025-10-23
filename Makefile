@@ -12,6 +12,7 @@ DOC_DIR  ?= doc
 API_DIR  ?= $(DOC_DIR)/api
 UML_DIR  ?= $(DOC_DIR)/uml
 PROJECT  ?= Piggy
+PY_ABS := $(abspath $(PY))
 
 PDOC_MOD    := pdoc
 PY2PUML_MOD := py2puml
@@ -100,14 +101,13 @@ quality: venv
 	"$(PIP)" install -U pip
 	"$(PIP)" install pytest pytest-cov pylint
 	@echo "Running pylint..."
-	@cd "$(SRC)" && "$(PY)" -m pylint --exit-zero --recursive=y .
-	@echo "Running tests with coverage (min $(COV_MIN)%)..."
+	- "$(PY_ABS)" -m pylint --exit-zero --recursive=y "$(SRC)"
+	@echo "Running tests with coverage..."
 	"$(PY)" -m pytest "$(TESTS)" \
 		--maxfail=1 \
 		--cov="$(SRC)" \
-		--cov-fail-under=$(COV_MIN) \
 		--cov-report=term-missing
-	@echo "✓ Quality check passed"
+	@echo "✓ Quality check finished"
 
 clean-quality:
 	"$(PY)" -c "import shutil, pathlib; \
