@@ -242,3 +242,13 @@ def test_init_exit_option(monkeypatch, capsys):
     assert g.current_player is None
     out = capsys.readouterr().out
     assert "Exiting..." in out
+
+def test_init_invalid_menu_option(monkeypatch, capsys):
+    inputs = iter(["A", "9"])
+    monkeypatch.setattr(builtins, "input", lambda *_: next(inputs))
+
+    g = game.Game()
+
+    assert g.game_on is False
+    out = capsys.readouterr().out
+    assert "Invalid option" in out
