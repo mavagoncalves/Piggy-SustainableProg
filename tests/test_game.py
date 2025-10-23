@@ -375,3 +375,26 @@ def test_run_alternates_players_until_winner_set():
     assert turn_count[0] == 3
     assert player_sequence == ["Player1", "Player2", "Player1"]
     assert g.winner is g.player1
+
+
+def test_plays_turn_displays_turn_and_score_info():
+    """plays_turn() should print whose turn it is and their current score."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Maria")
+    g.player1.score = 42
+    g.current_player = g.player1
+    g.game_on = True
+    g.vs_ai = False
+
+    with patch('builtins.input', return_value='q'), \
+            patch('builtins.print') as mock_print:
+        g.plays_turn()
+
+    printed_messages = [str(call) for call in mock_print.call_args_list]
+
+    assert any("Maria" in msg and "turn" in msg for msg in printed_messages), \
+        "Should print whose turn it is"
+
+    assert any("Maria" in msg and "42" in msg and "points" in msg for msg in printed_messages), \
+        "Should print player's current score"
