@@ -163,3 +163,44 @@ def test_run_returns_immediately_if_game_off():
     g.run()
     assert g.game_on is False
     assert g.winner is None
+
+class FakeDice:
+    """Deterministic dice: provide a list of ints to yield in order."""
+    def __init__(self, rolls):
+        self._rolls = list(rolls)
+        self.value = None
+
+    def roll(self):
+        if not self._rolls:
+            raise AssertionError("FakeDice ran out of rolls")
+        self.value = self._rolls.pop(0)
+        return self.value
+
+    def face(self):
+        faces = {1:"⚀",2:"⚁",3:"⚂",4:"⚃",5:"⚄",6:"⚅"}
+        return faces.get(self.value, "?")
+
+
+class FakeAI:
+    """Return the next decision ('roll' or 'hold') each time."""
+    def __init__(self, decisions):
+        self._decisions = list(decisions)
+
+    def decide_difficulty(self, my, op, turn):
+        if not self._decisions:
+            raise AssertionError("FakeAI ran out of decisions")
+        return self._decisions.pop(0)
+
+
+class SpyHighScore:
+    """Intercept add_result() calls; don't write files."""
+    def __init__(self):
+        self.calls = []
+
+    def add_result(self, **kw):
+        self.calls.append(kw)
+
+
+def make_game_bare():
+    return game.Game.__new__(game.Game)
+
