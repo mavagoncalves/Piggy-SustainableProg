@@ -290,3 +290,18 @@ def test_init_invalid_difficulty_stops_game():
     assert g.game_on is False
     assert g.player1.name == 'TestPlayer'
 
+
+def test_plays_turn_exits_immediately_when_game_off():
+    """plays_turn() should return immediately if game_on is False."""
+    from unittest.mock import patch
+    g = make_game()
+    g.game_on = False
+    g.current_player = Player("Test")
+    g.round_score = 99
+
+    with patch('builtins.input') as mock_input:
+        g.plays_turn()
+
+    mock_input.assert_not_called()
+    assert g.round_score == 99
+
