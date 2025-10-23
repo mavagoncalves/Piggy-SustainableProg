@@ -129,3 +129,19 @@ def test_check_score_ai_wins_by_name_variants_stop_game(ai_name):
 
     assert g.check_score() is True
     assert g.game_on is False
+
+def test_check_score_returns_false_just_below_100_no_side_effects():
+    """
+    Below 100 must return False and keep game running; no winner or score changes.
+    """
+    g = make_game()
+    g.player1 = Player("Alice"); g.player1.score = 99
+    g.player2 = Player("Bob");   g.player2.score = 80
+    g.current_player = g.player1
+    g.game_on = True
+
+    assert g.check_score() is False
+    assert g.game_on is True
+
+    assert g.player1.score == 99
+    assert g.player2.score == 80
