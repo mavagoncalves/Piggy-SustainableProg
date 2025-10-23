@@ -345,3 +345,33 @@ def test_plays_turn_alternative_input_formats():
 
     assert g.player1.score == 10
 
+
+def test_run_alternates_players_until_winner_set():
+    """run() should alternate between players until a winner is set."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Player1")
+    g.player2 = Player("Player2")
+    g.current_player = g.player1
+    g.game_on = True
+    g.winner = None
+
+    turn_count = [0]
+    player_sequence = []
+
+    def fake_plays_turn():
+        """Track which player's turn it is and set winner after 3 turns."""
+        turn_count[0] += 1
+        player_sequence.append(g.current_player.name)
+
+        if turn_count[0] == 3:
+            g.winner = g.current_player
+
+    g.plays_turn = fake_plays_turn
+
+    with patch('builtins.print'):
+        g.run()
+
+    assert turn_count[0] == 3
+    assert player_sequence == ["Player1", "Player2", "Player1"]
+    assert g.winner is g.player1
