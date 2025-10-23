@@ -231,3 +231,14 @@ def test_init_pvai_valid_difficulty(monkeypatch):
     assert g.player2.name == "AI"
     assert g.ai_controller is not None
     assert g.game_on is True
+
+def test_init_exit_option(monkeypatch, capsys):
+    inputs = iter(["A", "3"])
+    monkeypatch.setattr(builtins, "input", lambda *_: next(inputs))
+
+    g = game.Game()
+
+    assert g.game_on is False
+    assert g.current_player is None
+    out = capsys.readouterr().out
+    assert "Exiting..." in out
