@@ -279,3 +279,14 @@ def test_run_calls_turn_then_stops_when_winner_set(monkeypatch):
     assert calls["switches"] == 0
     assert g.winner is g.player1
 
+
+def test_init_invalid_difficulty_stops_game():
+    """When invalid AI difficulty is entered, game_on should be False."""
+    from unittest.mock import patch
+
+    with patch('builtins.input', side_effect=['TestPlayer', '2', 'invalid']):
+        g = game.Game()
+
+    assert g.game_on is False
+    assert g.player1.name == 'TestPlayer'
+
