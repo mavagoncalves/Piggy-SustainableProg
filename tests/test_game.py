@@ -305,3 +305,20 @@ def test_plays_turn_exits_immediately_when_game_off():
     mock_input.assert_not_called()
     assert g.round_score == 99
 
+
+def test_plays_turn_calls_ai_turn_for_ai_player():
+    """When vs_ai is True and current player is player2, should call ai_turn()."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Human")
+    g.player2 = Player("AI")
+    g.current_player = g.player2
+    g.vs_ai = True
+    g.game_on = True
+    g.ai_turn = Mock()
+
+    with patch('builtins.print'):
+        g.plays_turn()
+
+    g.ai_turn.assert_called_once()
+
