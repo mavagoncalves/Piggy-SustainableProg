@@ -23,7 +23,11 @@ endif
 .PHONY: venv install run test clean doc-deps doc uml docs serve-doc clean-doc quality clean-quality
 
 venv:
-	$(SYS_PY) -m venv $(VENV)
+	@if not exist "$(VENV)\Scripts\python.exe" ( \
+		$(SYS_PY) -m venv $(VENV) \
+	) else ( \
+		echo "✓ Virtual environment already exists." \
+	)
 	"$(PIP)" install -U pip
 
 install: venv
