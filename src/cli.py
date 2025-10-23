@@ -41,15 +41,15 @@ class PiggyCLI(cmd.Cmd):
             return False
         return True
 
-    def do_menu(self):
+    def do_menu(self, args):
         """Show the main menu options."""
         print(self.menu.display())
 
-    def do_rules(self):
+    def do_rules(self, args):
         """Show rules."""
         print(self.menu.rules())
 
-    def do_new(self):
+    def do_new(self, args):
         """Create a new game."""
         print("Loading Game...")
         g = Game()
@@ -59,7 +59,7 @@ class PiggyCLI(cmd.Cmd):
         self._bind_game(g)
         scoreboard_header(self.game)
 
-    def do_play(self):
+    def do_play(self, args):
         """Run the game loop."""
         if not self._need_game():
             return
@@ -68,24 +68,24 @@ class PiggyCLI(cmd.Cmd):
             print(f"\n{self.game.winner.name} wins with {self.game.winner.score} points!")
             scoreboard_header(self.game)
 
-    def do_change_name(self):
+    def do_change_name(self, args):
         """Change player names."""
         if not self._need_game():
             return
         print(self.menu.change_name())
 
-    def do_highscore(self):
+    def do_highscore(self, args):
         """Show highscores."""
         print("High Score:")
         HighScore().show()
 
-    def do_score(self):
+    def do_score(self, args):
         """Show the scoreboard."""
         if not self._need_game():
             return
         scoreboard_header(self.game)
 
-    def do_quit(self):
+    def do_quit(self, args):
         """Quit."""
         return True
 
