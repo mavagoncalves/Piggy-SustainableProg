@@ -1,6 +1,8 @@
+'''Command-line interface for Piggy game'''
 import cmd
 from src.menu import Menu
 from src.game import Game
+from src.highscore import HighScore
 
 def scoreboard_header(game: Game):
     """Header callback injected into Game.ui_header(game)."""
@@ -39,15 +41,15 @@ class PiggyCLI(cmd.Cmd):
             return False
         return True
 
-    def do_menu(self, arg):
+    def do_menu(self):
         """Show the main menu options."""
         print(self.menu.display())
 
-    def do_rules(self, arg):
+    def do_rules(self):
         """Show rules."""
         print(self.menu.rules())
 
-    def do_new(self, arg):
+    def do_new(self):
         """Create a new game."""
         print("Loading Game...")
         g = Game()
@@ -57,7 +59,7 @@ class PiggyCLI(cmd.Cmd):
         self._bind_game(g)
         scoreboard_header(self.game)
 
-    def do_play(self, arg):
+    def do_play(self):
         """Run the game loop."""
         if not self._need_game():
             return
@@ -66,32 +68,27 @@ class PiggyCLI(cmd.Cmd):
             print(f"\n{self.game.winner.name} wins with {self.game.winner.score} points!")
             scoreboard_header(self.game)
 
-    def do_change_name(self, arg):
+    def do_change_name(self):
         """Change player names."""
         if not self._need_game():
             return
         print(self.menu.change_name())
 
-    def do_highscore(self, arg):
+    def do_highscore(self):
         """Show highscores."""
-        from src.highscore import HighScore
         print("High Score:")
         HighScore().show()
 
-    def do_score(self, arg):
+    def do_score(self):
         """Show the scoreboard."""
         if not self._need_game():
             return
         scoreboard_header(self.game)
 
-    def do_quit(self, arg):
+    def do_quit(self):
         """Quit."""
         return True
 
     def do_input(self, arg):
         """Helper command to prompt for input."""
         return input(arg)
-
-    def emptyline(self):
-        '''Do nothing on empty input line.'''
-        pass

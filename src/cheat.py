@@ -1,3 +1,4 @@
+'''Cheat module defining the Cheat class'''
 class Cheat:
     '''Cheat class to handle cheat codes during the game
     Attributes:
@@ -11,7 +12,7 @@ class Cheat:
         '''Displays the cheat menu and processes user input'''
         while True:
             self.current=self.game.current_player   #Local access
-            if self.current.score >= 100:  # Checks of the player tries to get in again after being kicked out
+            if self.current.score >= 100:
                 print('Maximum score reached! Cheat menu will close now\n')
                 break
             self.show_cheat_menu()
@@ -24,11 +25,11 @@ class Cheat:
                     print("Invalid choice, enter a number.")
                     continue
 
-                if not (1 <= score_cheat <= 100):
+                if not 1 <= score_cheat <= 100:
                     print("Invalid choice, enter value between 1-100")
                     continue
                 self.current.add_score(score_cheat)
-                setattr(self.current, "cheat_use", True)  # ATTRIBUTE CREATED FOR PLAYER FOR CHEATS USED
+                setattr(self.current, "cheat_use", True)
 
             elif choice_cheats == "2":  # OPTION 2 - SUBTRACTING POINTS
                 try:
@@ -38,7 +39,7 @@ class Cheat:
                     continue
                 hypothetical_score = self.current.score - score_cheat
 
-                if not (1 <= score_cheat <= 100):
+                if not 1 <= score_cheat <= 100:
                     print("Invalid choice, enter value between 1-100")
                     continue
                 if hypothetical_score < 0:
@@ -59,4 +60,4 @@ class Cheat:
             - press 1 to add points
             - press 2 to subtract points
             - press 3 to quit the cheat  menu
-            Current points: {self.current.score}""")    #Value already assigned for 'current' before this function is called
+            Current points: {self.current.score}""")

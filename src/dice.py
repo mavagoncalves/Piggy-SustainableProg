@@ -1,3 +1,4 @@
+'''Dice module for Piggy game'''
 import random
 
 class Dice:
@@ -7,7 +8,7 @@ class Dice:
     - value: Integer indicating the current value of the dice
     - icon: String representing the visual icon of the dice face
     '''
-    def __init__(self, sides):
+    def __init__(self):
         self.value=random.randint(1, 6)
         self.icon=None
 

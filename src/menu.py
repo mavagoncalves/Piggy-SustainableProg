@@ -1,5 +1,4 @@
-from src.game import Game
-from src.highscore import HighScore
+'''Menu class for PiggyCLI'''
 
 class Menu:
     '''Menu class to support PiggyCLI commands
@@ -38,16 +37,18 @@ class Menu:
         ])
 
     def change_name(self):
-        '''Changes player names via PiggyCLI, returns result'''
+        """Changes player names via PiggyCLI, returns result."""
         if not self.game:
             return "No game in progress."
         result = []
-        name1 = self.cli.onecmd(f"input Enter new name for Player 1 ({self.game.player1.name}): ").strip()
+        name1 = self.cli.onecmd(f"Enter new name for Player 1 ({self.game.player1.name}): ").strip()
         if name1:
-            self.game.player1.change_name(name1)
+            self.game.player1.name = name1
             result.append(f"Player 1 name changed to {self.game.player1.name}")
-        name2 = self.cli.onecmd(f"input Enter new name for Player 2 ({self.game.player2.name}): ").strip()
+
+        name2 = self.cli.onecmd(f"Enter new name for Player 2 ({self.game.player2.name}): ").strip()
         if name2:
-            self.game.player2.change_name(name2)
+            self.game.player2.name = name2
             result.append(f"Player 2 name changed to {self.game.player2.name}")
+
         return "\n".join(result) if result else "No names changed."

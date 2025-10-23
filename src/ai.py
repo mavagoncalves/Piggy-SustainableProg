@@ -1,3 +1,4 @@
+'''AI controller for Piggy game with different difficulty levels'''
 import random
 
 class AI:
@@ -13,15 +14,15 @@ class AI:
     def decide_difficulty(self, myscore, opponent_score, turn_score):
         '''Decides whether to 'roll' or 'hold' based on difficulty level'''
         if self.difficulty == 'easy':
-            return self.easy(myscore, opponent_score, turn_score)
-        elif self.difficulty == 'medium':
+            return self.easy(myscore, turn_score)
+        if self.difficulty == 'medium':
             return self.medium(myscore, opponent_score, turn_score)
-        elif self.difficulty == 'hard':
+        if self.difficulty == 'hard':
             return self.hard(myscore, opponent_score, turn_score)
-        else:
-            raise ValueError("Unknown difficulty level => please choose 'easy', 'medium', or 'hard'.")
-        
-    def easy(self, myscore, opponent_score, turn_score):
+        raise ValueError("Unknown difficulty level => " \
+        "please choose 'easy', 'medium', or 'hard'.")
+
+    def easy(self, myscore, turn_score):
         '''
         Easy AI: 
         * rolls until turn score is 20 or more, then holds.
@@ -32,10 +33,10 @@ class AI:
 
         if myscore + turn_score >= self.goal:
             return 'hold'
-        elif turn_score >= limit:
+        if turn_score >= limit:
             return 'hold'
         return 'roll' if random.random() < 0.6 else 'hold'
-    
+
     def medium(self, myscore, opponent_score, turn_score):
         '''
         Medium AI:
@@ -45,7 +46,7 @@ class AI:
         '''
         if myscore + turn_score >= self.goal:
             return 'hold'
-        
+
         lead = myscore - opponent_score
         limit = 20
 
@@ -53,12 +54,11 @@ class AI:
             limit = 15
         elif lead <= (-30):
             limit = 25
-        
+
         if turn_score >= limit:
             return 'hold'
         return 'roll'
 
-    
     def hard(self, myscore, opponent_score, turn_score):
         '''
         Hard AI:
@@ -70,21 +70,21 @@ class AI:
 
         if myscore + turn_score >= self.goal:
             return 'hold'
-        
+
         lead = myscore - opponent_score
         limit = 20
-        
+
         if opponent_score >= self.goal - 20:
             limit = max(limit, 25)
 
         if myscore >= self.goal - 20:
             limit = min(limit, 15)
-        
+
         if lead >= 30:
             limit = min(limit, 15)
         elif lead <= -40:
             limit = max(limit, 30)
-        
+
         #endgame strategy
 
         need = self.goal - myscore
@@ -92,9 +92,8 @@ class AI:
             if turn_score >= min(10, need):
                 return 'hold'
             return 'roll'
-        
+
         #normal play
         if turn_score >= limit:
             return 'hold'
         return 'roll'
-    

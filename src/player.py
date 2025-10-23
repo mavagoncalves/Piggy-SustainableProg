@@ -1,3 +1,4 @@
+'''Player module defining the Player class'''
 class Player:
     '''Player class to represent a game player
     Attributes:
@@ -17,4 +18,3 @@ class Player:
         '''Adds points to the player's score'''
         self.score += points
         print(f"{self.name} gained {points} points. Total score: {self.score}")
-

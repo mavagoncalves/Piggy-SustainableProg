@@ -6,6 +6,7 @@
 SRC ?= src
 TESTS ?= tests
 VENV ?= .venv
+COV_MIN ?= 80
 
 ifeq ($(OS),Windows_NT)
 SYS_PY := python
@@ -34,8 +35,6 @@ test: venv
 
 clean:
 	@rm -rf __pycache__ .pytest_cache htmlcov || true
-
-
 
 # -------------------------------------
 #             Documentation 
@@ -66,7 +65,7 @@ doc: venv
 	"$(PY)" -c "import sys, runpy, importlib.util; sys.path.insert(0, r'src'); sys.argv=['pdoc','-o', r'doc/api','--docformat','google','--no-show-source', r'src']; m='pdoc.__main__'; runpy.run_module(m if importlib.util.find_spec(m) else 'pdoc', run_name='__main__'); print('✓ API documentation: doc/api/index.html')"
 
 # Generate UML diagrams as PNGs into doc/uml (no Graphviz, no pyreverse)
- uml:
+uml:
 	"$(PY)" tools/uml_build.py --project "$(PROJECT)" --src "$(SRC)" --out "$(UML_DIR)"
 
 # Build both API docs and UML PNGs
@@ -81,3 +80,28 @@ serve-doc: venv
 clean-doc:
 	@rm -rf "$(API_DIR)" "$(UML_DIR)" || true
 	@echo "✓ Documentation cleaned."
+
+# -------------------------------------
+#        Coverage and quality
+# -------------------------------------
+
+.PHONY: quality
+quality: venv
+	"$(PIP)" install -U pip
+	"$(PIP)" install pytest pytest-cov pylint
+	@echo "Running pylint..."
+	"$(PY)" -m pylint "$(SRC)"
+	@echo "Running tests with coverage (min $(COV_MIN)%)..."
+	"$(PY)" -m pytest "$(TESTS)" \
+		--maxfail=1 \
+		--cov="$(SRC)" \
+		--cov-fail-under=$(COV_MIN) \
+		--cov-report=term-missing
+	@echo "✓ Quality check passed"
+
+.PHONY: clean-quality
+clean-quality:
+	@rm -rf .coverage htmlcov .pytest_cache || true
+	@find "$(SRC)" -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	@echo "✓ Cleaned quality artifacts"
+

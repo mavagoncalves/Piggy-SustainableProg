@@ -1,3 +1,4 @@
+'''Highscore management for Piggy game'''
 import json
 import os
 import time
@@ -18,7 +19,7 @@ class HighScore:
         try:
             with open(self.file, "r", encoding="utf-8") as f:
                 data = json.load(f)
-        except Exception:
+        except (FileNotFoundError, json.JSONDecodeError):
             return []
         cleaned = []
         for e in data if isinstance(data, list) else []:
@@ -67,12 +68,13 @@ class HighScore:
         '''Displays the highscore list'''
         scores = self.load()
         if not scores:
-            print("\nNo highscores yet.\n"); return
+            print("\nNo highscores yet.\n")
+            return
         scores.sort(key=lambda e: (-e["margin"], -e["score"], e["ts"]))
         print("\n--- TOP 10 (by margin) ---")
         for i, s in enumerate(scores[: self.limit], start=1):
-            print(f"{i:2}. {s['name']:<20} +{s['margin']:>3}  vs {s['opponent']:<12} ({s['score']}-{s['opp_score']})")
+            print(
+                f"{i:2}. {s['name']:<20} +{s['margin']:>3}" 
+                f" vs {s['opponent']:<12} ({s['score']}-{s['opp_score']})"
+            )
         print("---------------------------")
-
-
-

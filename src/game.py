@@ -1,3 +1,4 @@
+'''Main Game class for Piggy game'''
 from src.dice import Dice
 from src.player import Player
 from src.ai import AI
@@ -5,7 +6,7 @@ from src.cheat import Cheat
 from src.highscore import HighScore
 
 
-class Game:
+class Game: # pylint: disable=too-many-instance-attributes
     '''Main Game class to control the game flow
     Attributes:
     - player1: Player object for player 1
@@ -21,7 +22,7 @@ class Game:
     '''
     def __init__(self):
         self.player1 = Player(input('Enter name for Player 1: '))
-        self.dice=Dice(6)
+        self.dice=Dice()
         self.current_player=None
         self.winner=None
         self.vs_ai=False
@@ -29,8 +30,10 @@ class Game:
         self.round_score=0
         self.game_on=True   #GAME RUNNING
         self.cheats=Cheat(self) #Cheat class call
+        self.scoreboard_header=None  #Placeholder for scoreboard header callback
 
-        mode=input("----------GAME MODES----------\n1) PvP \n2) PvAI \n3) Exit \nYour choice: ").strip()
+        mode=input("----------GAME MODES----------" \
+        "\n1) PvP \n2) PvAI \n3) Exit \nYour choice: ").strip()
         if mode=="1":
             self.player2 = Player(input('Enter name for Player 2: '))
             self.current_player = self.player1
@@ -62,21 +65,12 @@ class Game:
         """Runs the game loop until there is a winner or the game is ended"""
         if not self.game_on:
             return
-        
-        if hasattr(self, "ui_header") and callable(self.ui_header):
-            self.ui_header(self)
 
         while self.game_on and not self.winner:
             self.plays_turn()  # play exactly one turn for current_player
 
             if self.game_on and not self.winner:
                 self.change_player()
-
-                # CLI header
-                if hasattr(self, "ui_header") and callable(self.ui_header):
-                    self.ui_header(self)
-
-
 
 
     def plays_turn(self):
@@ -100,7 +94,7 @@ class Game:
 
             choice = input("Choose: roll (r), hold (h), or quit (q): ").strip().lower()
 
-            if choice == "cheats":
+            if choice == "hidden":
                 self.cheats.cheat_menu()
                 continue
 

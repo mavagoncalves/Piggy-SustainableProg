@@ -82,7 +82,7 @@ def test_empty_winner_name_is_not_saved(tmp_path):
     # Either nothing saved or no empty winner fields
     assert all(winner_name_of(r).strip() != "" for r in rows)
 
-def test_05_negative_and_zero_scores_are_handled(tmp_path):
+def test_negative_and_zero_scores_are_handled(tmp_path):
     hs = make_hs(tmp_path)
     hs.add_result("ZeroWin", 0, "ZeroLose", -10)
     hs.add_result("NegWin", -5, "MoreNeg", -20)
