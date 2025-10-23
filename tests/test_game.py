@@ -252,3 +252,30 @@ def test_init_invalid_menu_option(monkeypatch, capsys):
     assert g.game_on is False
     out = capsys.readouterr().out
     assert "Invalid option" in out
+
+def test_run_calls_turn_then_stops_when_winner_set(monkeypatch):
+    g = make_game_bare()
+    g.player1 = Player("A"); g.player2 = Player("B")
+    g.current_player = g.player1
+    g.game_on = True
+    g.winner = None
+
+    calls = {"turns": 0, "switches": 0}
+
+    def fake_plays_turn():
+        calls["turns"] += 1
+        g.winner = g.current_player
+
+    def fake_change_player():
+        calls["switches"] += 1
+        g.current_player = g.player2 if g.current_player is g.player1 else g.player1
+
+    monkeypatch.setattr(g, "plays_turn", fake_plays_turn)
+    monkeypatch.setattr(g, "change_player", fake_change_player)
+
+    g.run()
+
+    assert calls["turns"] == 1
+    assert calls["switches"] == 0
+    assert g.winner is g.player1
+
