@@ -322,3 +322,25 @@ def test_plays_turn_calls_ai_turn_for_ai_player():
 
     g.ai_turn.assert_called_once()
 
+
+def test_ai_turn_resets_round_score():
+    """ai_turn() should start by resetting round_score to 0."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Human")
+    g.player2 = Player("AI")
+    g.current_player = g.player2
+    g.vs_ai = True
+    g.round_score = 50
+    g.ai_controller = Mock()
+    g.ai_controller.decide_difficulty.return_value = "hold"
+    g.dice = Mock()
+    g.dice.roll.return_value = 5
+    g.dice.face.return_value = "⚄"
+    g.check_score = Mock(return_value=False)
+
+    with patch('builtins.print'):
+        g.ai_turn()
+
+    assert g.current_player.score == 5
+
