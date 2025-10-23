@@ -100,7 +100,8 @@ quality: venv
 	"$(PIP)" install -U pip
 	"$(PIP)" install pytest pytest-cov pylint
 	@echo "Running pylint..."
-	- "$(PY)" -m pylint "$(SRC)"          # ignore non-zero pylint exit on Windows/macOS
+	# run inside src so only project files are linted
+	@cd "$(SRC)" && "$(PY)" -m pylint --exit-zero --recursive=y .
 	@echo "Running tests with coverage (min $(COV_MIN)%)..."
 	"$(PY)" -m pytest "$(TESTS)" \
 		--maxfail=1 \
