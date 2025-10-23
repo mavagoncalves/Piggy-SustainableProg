@@ -145,3 +145,12 @@ def test_check_score_returns_false_just_below_100_no_side_effects():
 
     assert g.player1.score == 99
     assert g.player2.score == 80
+
+def test_change_player_from_none_defaults_to_player1():
+    g = make_game()
+    g.player1 = Player("A")
+    g.player2 = Player("B")
+    g.current_player = None
+
+    g.change_player()
+    assert g.current_player is g.player1
