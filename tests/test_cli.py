@@ -111,7 +111,7 @@ def test_do_menu_command():
     cli.menu.display = Mock(return_value="Main Menu Options")
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_menu()
+        cli.do_menu("")
         output = mock_stdout.getvalue()
 
     assert "Main Menu Options" in output
@@ -124,7 +124,7 @@ def test_do_rules_command():
     cli.menu.rules = Mock(return_value="Game Rules Here")
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_rules()
+        cli.do_rules("")
         output = mock_stdout.getvalue()
 
     assert "Game Rules Here" in output
@@ -139,7 +139,7 @@ def test_do_new_command_successful():
 
     with patch('src.cli.Game', return_value=mock_game), \
             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_new()
+        cli.do_new("")
         output = mock_stdout.getvalue()
 
     assert "Loading Game..." in output
@@ -155,7 +155,7 @@ def test_do_new_command_failed_game():
 
     with patch('src.cli.Game', return_value=mock_game), \
             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_new()
+        cli.do_new("")
         output = mock_stdout.getvalue()
 
     assert "Loading Game..." in output
@@ -168,7 +168,7 @@ def test_do_play_command_without_game():
     cli = PiggyCLI()
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_play()
+        cli.do_play("")
         output = mock_stdout.getvalue()
 
     assert "No game yet. Start one with: new" in output
@@ -182,7 +182,7 @@ def test_do_play_command_with_game_no_winner():
     cli.game = mock_game
 
     with patch('sys.stdout', new_callable=io.StringIO):
-        cli.do_play()
+        cli.do_play("")
 
     mock_game.run.assert_called_once()
 
@@ -198,7 +198,7 @@ def test_do_play_command_with_winner():
     cli.game = mock_game
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_play()
+        cli.do_play("")
         output = mock_stdout.getvalue()
 
     mock_game.run.assert_called_once()
@@ -211,7 +211,7 @@ def test_do_change_name_without_game():
     cli.menu.change_name = Mock()
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_change_name()
+        cli.do_change_name("")
         output = mock_stdout.getvalue()
 
     assert "No game yet. Start one with: new" in output
@@ -225,7 +225,7 @@ def test_do_change_name_with_game():
     cli.menu.change_name = Mock(return_value="Name changed")
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_change_name()
+        cli.do_change_name("")
         output = mock_stdout.getvalue()
 
     assert "Name changed" in output
@@ -240,7 +240,7 @@ def test_do_highscore_command():
 
     with patch('src.cli.HighScore', return_value=mock_highscore), \
             patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_highscore()
+        cli.do_highscore("")
         output = mock_stdout.getvalue()
 
     assert "High Score:" in output
@@ -252,7 +252,7 @@ def test_do_score_without_game():
     cli = PiggyCLI()
 
     with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
-        cli.do_score()
+        cli.do_score("")
         output = mock_stdout.getvalue()
 
     assert "No game yet. Start one with: new" in output
@@ -266,7 +266,7 @@ def test_do_score_with_game():
 
     with patch('src.cli.scoreboard_header') as mock_header, \
             patch('sys.stdout', new_callable=io.StringIO):
-        cli.do_score()
+        cli.do_score("")
 
     mock_header.assert_called_once_with(mock_game)
 
@@ -275,7 +275,7 @@ def test_do_quit_command():
     """do_quit should return True to exit cmd loop"""
     cli = PiggyCLI()
 
-    result = cli.do_quit()
+    result = cli.do_quit("")
 
     assert result is True
 
