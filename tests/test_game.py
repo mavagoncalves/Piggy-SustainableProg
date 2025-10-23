@@ -321,8 +321,3 @@ def test_plays_turn_calls_ai_turn_for_ai_player():
         g.plays_turn()
 
     g.ai_turn.assert_called_once()
-
-
-
-    assert any("Maria" in msg and "42" in msg and "points" in msg for msg in printed_messages), \
-        "Should print player's current score"
