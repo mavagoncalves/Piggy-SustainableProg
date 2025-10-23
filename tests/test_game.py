@@ -1,7 +1,7 @@
 from src import game
 
 from src.player import Player
-
+import pytest
 
 def make_game():
     return game.Game.__new__(game.Game)
@@ -112,3 +112,20 @@ def test_run_exits_immediately_if_winner_already_set():
     assert g.game_on is True
     assert g.current_player is g.player1
     assert g.winner is g.player2
+
+@pytest.mark.parametrize("ai_name", ["AI", "ai", "Ai", "aI"])
+def test_check_score_ai_wins_by_name_variants_stop_game(ai_name):
+    """
+    If the current player is 'AI', check_score() must:
+    - return True
+    - set game_on to False
+    - not require any user input
+    """
+    g = make_game()
+    g.player1 = Player("Human"); g.player1.score = 12
+    g.player2 = Player(ai_name); g.player2.score = 100
+    g.current_player = g.player2
+    g.game_on = True
+
+    assert g.check_score() is True
+    assert g.game_on is False
