@@ -344,3 +344,33 @@ def test_ai_turn_resets_round_score():
 
     assert g.current_player.score == 5
 
+
+def test_ai_turn_roll_one_prints_message_and_returns():
+    """When AI rolls 1, should print loss message and return immediately."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Human")
+    g.player2 = Player("AI")
+    g.current_player = g.player2
+    g.current_player.score = 50
+    g.vs_ai = True
+    g.ai_controller = Mock()
+    g.ai_controller.decide_difficulty.return_value = "roll"
+    g.dice = Mock()
+    g.dice.roll.return_value = 1
+    g.dice.face.return_value = "⚀"
+
+    with patch('builtins.print') as mock_print:
+        g.ai_turn()
+
+    print_calls = [str(call) for call in mock_print.call_args_list]
+    loss_message_found = any(
+        "lost the score and the turn" in str(call).lower()
+        for call in print_calls
+    )
+    assert loss_message_found, "Expected 'lost the score and the turn' message"
+
+    assert g.current_player.score == 50
+
+    assert g.current_player.score == 50
+
