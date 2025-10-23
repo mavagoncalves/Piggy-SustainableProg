@@ -1,72 +1,165 @@
+import builtins
 from src.cheat import Cheat
-from src.player import Player
-from src import game
-from tests.test_game import make_game
+
+# ---------- helpers ----------
+
+class DummyPlayer:
+    def __init__(self, score=0):
+        self.score = score
+
+    def add_score(self, n: int):
+        self.score += n
 
 
-def test_cheat_menu_exits_immediately_when_score_is_100():
-    '''cheat_menu() should exit immediately if current player's score is 100 or more'''
-    g = make_game()
-    g.player1 = Player("Player1")
-    g.current_player = g.player1
-    g.current_player.score = 100
-    g.cheats = Cheat(g)
-    g.cheats.cheat_menu()
-    assert g.current_player.score == 100
+class DummyGame:
+    def __init__(self, player: DummyPlayer):
+        self.current_player = player
 
-def test_show_cheat_menu_runs():
-    '''show_cheat_menu() should run without errors'''
-    g = make_game()
-    g.player1 = Player("Alice")
-    g.current_player = g.player1
-    g.current_player.score = 42
-    cheat = Cheat(g)
-    cheat.current = g.current_player
-    cheat.show_cheat_menu()
 
-def test_show_cheat_menu_prints_full_menu(capsys):
-    """show_cheat_menu() should print menu lines and current points."""
-    g = make_game()
-    g.player1 = Player("Tester")
-    g.current_player = g.player1
-    g.current_player.score = 77
-    cheat = Cheat(g)
-    cheat.current = g.current_player
-    cheat.show_cheat_menu()
+def feed_inputs(monkeypatch, answers):
+    """Feed a sequence of answers to builtins.input."""
+    it = iter(answers)
+    monkeypatch.setattr(builtins, "input", lambda _prompt="": next(it))
+
+# ---------- Tests ----------
+
+def test_invalid_option_then_quit(monkeypatch, capsys):
+    """Invalid option prints message, then '3' quits."""
+    player = DummyPlayer(score=10)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    # First give an invalid choice, then quit
+    feed_inputs(monkeypatch, ["x", "3"])
+    cheat.cheat_menu()
     out = capsys.readouterr().out
 
-    # Check key menu and the score
     assert "WELCOME TO CHEAT MENU" in out
-    assert "- press 1 to add points" in out
-    assert "- press 2 to subtract points" in out
-    assert "- press 3 to quit the cheat  menu" in out
-    assert "Current points: 77" in out
+    assert "Invalid option: please select '1', '2' or '3'." in out
+    assert player.score == 10
 
-def test_game_is_saved():
-    '''Cheat object should store the game passed to it'''
-    game = "my_game"
+def test_max_score_exits_without_prompt(capsys):
+    """If current score >= 100, it exits immediately and does not show the menu."""
+    player = DummyPlayer(score=100)
+    game = DummyGame(player)
     cheat = Cheat(game)
-    assert cheat.game == "my_game"
 
-def test_current_is_none_initially():
-    '''Current attribute should be None when Cheat object is created'''
-    cheat = Cheat("game")
-    assert cheat.current is None
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
 
-def test_game_can_be_any_object():
-    '''Cheat object should accept any object as game'''
-    class DummyGame: pass
-    g = DummyGame()
-    cheat = Cheat(g)
-    assert cheat.game is g
+    assert "Maximum score reached! Cheat menu will close now" in out
+    assert "WELCOME TO CHEAT MENU" not in out
 
-def test_multiple_cheat_objects_independent():
-    '''Multiple Cheat objects should have independent game attributes'''
-    c1 = Cheat("game1")
-    c2 = Cheat("game2")
-    assert c1.game != c2.game
 
-def test_show_cheat_menu_is_callable():
-    '''show_cheat_menu should be a callable method of Cheat'''
-    cheat = Cheat("game")
-    assert callable(cheat.show_cheat_menu)
+def test_add_points_valid(monkeypatch, capsys):
+    """Option 1 with a valid integer in range adds to score and sets cheat_use."""
+    player = DummyPlayer(score=10)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["1", "5", "3"])  # add 5, then quit
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert player.score == 15
+    assert getattr(player, "cheat_use", False) is True
+    assert "WELCOME TO CHEAT MENU" in out
+
+
+def test_add_points_non_int(monkeypatch, capsys):
+    """Option 1 with non-integer input prints error and continues; no score change."""
+    player = DummyPlayer(score=7)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["1", "abc", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "Invalid choice, enter a number." in out
+    assert player.score == 7
+    assert not hasattr(player, "cheat_use")
+
+
+def test_add_points_out_of_range_low(monkeypatch, capsys):
+    """Option 1 with value < 1 prints range error; no score change."""
+    player = DummyPlayer(score=12)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["1", "0", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "Invalid choice, enter value between 1-100" in out
+    assert player.score == 12
+
+
+def test_add_points_out_of_range_high(monkeypatch, capsys):
+    """Option 1 with value > 100 prints range error; no score change."""
+    player = DummyPlayer(score=12)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["1", "101", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "Invalid choice, enter value between 1-100" in out
+    assert player.score == 12
+
+
+def test_subtract_points_non_int(monkeypatch, capsys):
+    """Option 2 with non-integer input prints error; no score change."""
+    player = DummyPlayer(score=20)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["2", "xyz", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "Invalid choice, enter a number." in out
+    assert player.score == 20
+
+
+def test_subtract_points_out_of_range(monkeypatch, capsys):
+    """Option 2 with value < 1 prints range error; no score change."""
+    player = DummyPlayer(score=20)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["2", "0", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "Invalid choice, enter value between 1-100" in out
+    assert player.score == 20
+
+
+def test_subtract_points_negative_result(monkeypatch, capsys):
+    """Option 2 that would make score negative prints error; no score change."""
+    player = DummyPlayer(score=5)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["2", "10", "3"])
+    cheat.cheat_menu()
+    out = capsys.readouterr().out
+
+    assert "your score can't be less than 0" in out
+    assert player.score == 5
+
+
+def test_subtract_points_valid_sets_flag_and_updates(monkeypatch, capsys):
+    """Valid subtraction reduces score and sets cheat_use flag."""
+    player = DummyPlayer(score=20)
+    game = DummyGame(player)
+    cheat = Cheat(game)
+
+    feed_inputs(monkeypatch, ["2", "7", "3"])
+    cheat.cheat_menu()
+    _ = capsys.readouterr().out
+
+    assert player.score == 13
+    assert getattr(player, "cheat_use", False) is True
