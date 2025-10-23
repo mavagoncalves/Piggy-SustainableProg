@@ -218,3 +218,16 @@ def test_init_pvp_sets_players_and_current(monkeypatch):
     assert g.current_player is g.player1
     assert g.vs_ai is False
     assert g.game_on is True
+
+def test_init_pvai_valid_difficulty(monkeypatch):
+
+    inputs = iter(["A", "2", "medium"])
+    monkeypatch.setattr(builtins, "input", lambda *_: next(inputs))
+
+    g = game.Game()
+
+    assert g.vs_ai is True
+    assert g.current_player is g.player1
+    assert g.player2.name == "AI"
+    assert g.ai_controller is not None
+    assert g.game_on is True
