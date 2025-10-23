@@ -154,3 +154,12 @@ def test_change_player_from_none_defaults_to_player1():
 
     g.change_player()
     assert g.current_player is g.player1
+
+def test_run_returns_immediately_if_game_off():
+    g = make_game()
+    g.game_on = False
+    g.winner = None
+    # Should be a no-op and not raise
+    g.run()
+    assert g.game_on is False
+    assert g.winner is None
