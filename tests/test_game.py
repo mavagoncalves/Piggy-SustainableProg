@@ -322,3 +322,26 @@ def test_plays_turn_calls_ai_turn_for_ai_player():
 
     g.ai_turn.assert_called_once()
 
+
+def test_plays_turn_alternative_input_formats():
+    """Test that 'roll', 'hold', 'quit' full words work."""
+    from unittest.mock import patch, Mock
+    g = make_game()
+    g.player1 = Player("Jack")
+    g.current_player = g.player1
+    g.game_on = True
+    g.vs_ai = False
+    g.winner = None
+    g.dice = Mock()
+    g.dice.roll.return_value = 10
+    g.dice.face.return_value = "⚅"
+
+    inputs = ['roll', 'hold']
+
+    with patch('builtins.input', side_effect=inputs), \
+            patch('builtins.print'), \
+            patch('src.highscore.HighScore'):
+        g.plays_turn()
+
+    assert g.player1.score == 10
+
