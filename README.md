@@ -59,6 +59,9 @@ Piggy/
 ├── main.py
 ├── Makefile
 ├── requirements.txt
+├── .gitignore
+├── pytest.ini
+├── LICENSE.md
 └── README.md
 ```
 
