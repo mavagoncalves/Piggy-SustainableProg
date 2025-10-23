@@ -67,6 +67,9 @@ class Game: # pylint: disable=too-many-instance-attributes
             return
 
         while self.game_on and not self.winner:
+            if hasattr(self, "ui_header") and callable(self.ui_header):
+                self.ui_header(self)
+
             self.plays_turn()  # play exactly one turn for current_player
 
             if self.game_on and not self.winner:
