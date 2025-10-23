@@ -3,70 +3,75 @@
 # Cross-platform (macOS/Linux/Windows)
 # -------------------------------------
 
-SRC ?= src
-TESTS ?= tests
-VENV ?= .venv
-COV_MIN ?= 80
+# -------- Config --------
+SRC      ?= src
+TESTS    ?= tests
+VENV     ?= .venv
+COV_MIN  ?= 80
+DOC_DIR  ?= doc
+API_DIR  ?= $(DOC_DIR)/api
+UML_DIR  ?= $(DOC_DIR)/uml
+PROJECT  ?= Piggy
 
+PDOC_MOD    := pdoc
+PY2PUML_MOD := py2puml
+PYDEPS_CMD  := pydeps
+
+# -------- OS-specific shell + paths --------
 ifeq ($(OS),Windows_NT)
+SHELL := cmd
+.SHELLFLAGS := /C
 SYS_PY := python
-PY := $(VENV)/Scripts/python.exe
-PIP := $(VENV)/Scripts/pip.exe
-PATH_SEP := \\
+PY  := $(VENV)\Scripts\python.exe
+PIP := $(VENV)\Scripts\pip.exe
 else
+SHELL := /bin/bash
+.SHELLFLAGS := -c
 SYS_PY := python3
-PY := $(VENV)/bin/python
+PY  := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
-PATH_SEP := /
 endif
 
-.PHONY: venv install run test clean doc-deps doc uml docs serve-doc clean-doc quality clean-quality
+# -------- Phony targets --------
+.PHONY: venv install run test clean doc-deps doc uml docs serve-doc clean-doc quality clean-quality diag
 
+# -------- Virtual env (OS-specific) --------
+ifeq ($(OS),Windows_NT)
 venv:
-	@if not exist "$(VENV)\Scripts\python.exe" ( \
-		$(SYS_PY) -m venv $(VENV) \
+	if not exist "$(PY)" ( \
+		$(SYS_PY) -m venv "$(VENV)" \
 	) else ( \
-		echo "✓ Virtual environment already exists." \
+		echo ✓ Virtual environment already exists. \
 	)
 	"$(PIP)" install -U pip
+else
+venv:
+	[ -x "$(PY)" ] || $(SYS_PY) -m venv "$(VENV)"
+	"$(PIP)" install -U pip
+endif
 
+# -------- Install deps --------
 install: venv
 	"$(PIP)" install -r requirements.txt
 
+# -------- Run / Test --------
 run: venv
 	"$(PY)" main.py
 
 test: venv
 	"$(PY)" -m pytest -v
 
-# Portable clean using Python (no rm/find flags)
+# -------- Clean (portable via Python) --------
 clean:
 	"$(PY)" -c "import shutil, pathlib; \
-for p in map(pathlib.Path, ['__pycache__','.pytest_cache','htmlcov']): \
-    shutil.rmtree(p, ignore_errors=True); \
+[shutil.rmtree(pathlib.Path(p), ignore_errors=True) for p in ['__pycache__','.pytest_cache','htmlcov']]; \
 print('✓ Cleaned build/test artifacts')"
 
-# -------------------------------------
-#             Documentation 
-# -------------------------------------
-
-DOC_DIR   ?= doc
-API_DIR   ?= $(DOC_DIR)/api
-UML_DIR   ?= $(DOC_DIR)/uml
-PROJECT   ?= Piggy
-SRC_ABS   := $(abspath $(SRC))
-
-# Python modules via the venv
-PDOC_MOD      := pdoc
-PY2PUML_MOD   := py2puml
-PYDEPS_CMD    := pydeps
-
-# Install Python-only deps (works on macOS & Windows)
+# -------- Documentation --------
 doc-deps: venv
 	"$(PIP)" install -U pdoc py2puml pydeps requests
 	@echo "✓ Installed: pdoc, py2puml, pydeps, requests"
 
-# Generate HTML API docs -> doc/api (portable mkdir)
 doc: venv
 	"$(PY)" -c "import os; os.makedirs(r'$(API_DIR)', exist_ok=True)"
 	"$(PY)" -c "import sys, runpy, importlib.util; sys.path.insert(0, r'$(SRC)'); \
@@ -74,34 +79,28 @@ sys.argv=['pdoc','-o', r'$(API_DIR)','--docformat','google','--no-show-source', 
 m='pdoc.__main__'; runpy.run_module(m if importlib.util.find_spec(m) else 'pdoc', run_name='__main__'); \
 print('✓ API documentation: $(API_DIR)/index.html')"
 
-# Generate UML diagrams as PNGs into doc/uml (no Graphviz)
 uml: venv
 	"$(PY)" -c "import os; os.makedirs(r'$(UML_DIR)', exist_ok=True)"
 	"$(PY)" tools/uml_build.py --project "$(PROJECT)" --src "$(SRC)" --out "$(UML_DIR)"
 
-# Build both API docs and UML PNGs
 docs: doc uml
 	@echo "✓ Full documentation written to: $(DOC_DIR)/"
 
-# Serve API docs locally (http://127.0.0.1:8080)
 serve-doc: venv
 	"$(PY)" -m $(PDOC_MOD) --http :8080 "$(SRC)"
 
-# Clean only generated documentation (portable)
 clean-doc:
-	"$(PY)" -c "import shutil, pathlib; \
-[shutil.rmtree(pathlib.Path(p), ignore_errors=True) for p in [r'$(API_DIR)', r'$(UML_DIR)']]; \
+	"$(PY)" -c "import shutil; \
+shutil.rmtree(r'$(API_DIR)', ignore_errors=True); \
+shutil.rmtree(r'$(UML_DIR)', ignore_errors=True); \
 print('✓ Documentation cleaned.')"
 
-# -------------------------------------
-#        Coverage and quality
-# -------------------------------------
-
+# -------- Coverage & Lint (cross-platform) --------
 quality: venv
 	"$(PIP)" install -U pip
 	"$(PIP)" install pytest pytest-cov pylint
 	@echo "Running pylint..."
-	"$(PY)" -m pylint "$(SRC)" || true
+	- "$(PY)" -m pylint "$(SRC)"          # ignore non-zero pylint exit on Windows/macOS
 	@echo "Running tests with coverage (min $(COV_MIN)%)..."
 	"$(PY)" -m pytest "$(TESTS)" \
 		--maxfail=1 \
@@ -111,10 +110,9 @@ quality: venv
 	@echo "✓ Quality check passed"
 
 clean-quality:
-	"$(PY)" -c "import shutil, pathlib, os; \
+	"$(PY)" -c "import shutil, pathlib; \
 shutil.rmtree('.coverage', ignore_errors=True); \
 shutil.rmtree('htmlcov', ignore_errors=True); \
 shutil.rmtree('.pytest_cache', ignore_errors=True); \
-from pathlib import Path; \
-[shutil.rmtree(p, ignore_errors=True) for p in Path('$(SRC)').rglob('__pycache__') if p.is_dir()]; \
+[shutil.rmtree(p, ignore_errors=True) for p in pathlib.Path('$(SRC)').rglob('__pycache__') if p.is_dir()]; \
 print('✓ Cleaned quality artifacts')"
