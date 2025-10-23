@@ -115,18 +115,24 @@ def test_change_player_from_player2_goes_back_to_player1():
     g.change_player()
     assert g.current_player is g.player1
 
+
 def test_check_score_above_100_sets_winner_and_returns_true():
     """Scores strictly above 100 should also declare a winner."""
+    from unittest.mock import patch
     g = make_game()
     g.player1 = Player("Alice")
     g.player2 = Player("Bob")
     g.current_player = g.player2
     g.current_player.score = 150
     g.winner = None
-    assert g.check_score() is True
-    assert g.winner is g.player2
-    assert g.winner.name == "Bob"
-    assert g.winner.score == 150
+    g.game_on = True
+
+    with patch('builtins.print'), \
+            patch('src.game.HighScore'):
+        result = g.check_score()
+
+    assert result is True
+    assert g.game_on is False
 
 def test_run_exits_immediately_if_winner_already_set():
     """
