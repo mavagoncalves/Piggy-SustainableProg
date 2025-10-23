@@ -1,3 +1,5 @@
+import builtins
+
 from src import game
 
 from src.player import Player
@@ -204,3 +206,15 @@ class SpyHighScore:
 def make_game_bare():
     return game.Game.__new__(game.Game)
 
+def test_init_pvp_sets_players_and_current(monkeypatch):
+    # Inputs: p1 name, mode=1, p2 name
+    inputs = iter(["Alice", "1", "Bob"])
+    monkeypatch.setattr(builtins, "input", lambda *_: next(inputs))
+
+    g = game.Game()  # run __init__
+
+    assert isinstance(g.player1, Player) and g.player1.name == "Alice"
+    assert isinstance(g.player2, Player) and g.player2.name == "Bob"
+    assert g.current_player is g.player1
+    assert g.vs_ai is False
+    assert g.game_on is True
